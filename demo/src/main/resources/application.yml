@@ -1,0 +1,11 @@
+server:
+  port:8080
+
+#spring 관련
+spring:
+  devtools: #바로 재시작하기
+    restart:
+      enabled: true
+#  output: #console 창 색상 변경
+#    ansi:
+#      enabled: true

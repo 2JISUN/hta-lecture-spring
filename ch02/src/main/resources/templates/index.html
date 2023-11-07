@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /* 그라데이션 배경색 스타일 */
+        body {
+            background: linear-gradient(to bottom, #fdfeff, #98d5ee);
+            background-attachment: fixed;
+            background-size: 100% 100%;
+        }
+
+        /* 버튼 스타일 */
+        .login-button {
+            background-color: #87CEEB; /* 하늘색 (파란색) */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* 버튼 호버 효과 */
+        .login-button:hover {
+            background-color: #1E90FF; /* 호버 효과 색상 (예를 들어, 진한 파란색) */
+        }
+    </style>
+    </style>
+</head>
+<body>
+<h1 th:text="${name != null} ? ${name} + '님 안녕하세요!🩵' : 'name이 ❌없는❌ 페이지.HTML'"></h1>
+<form action="/login"
+      method="get">
+    <!-- 예쁜 로그인 버튼 -->
+    <button class="login-button" type="submit">로그인</button>
+</form>
+
+<form action="/create"
+        method="get">
+    <!-- 예쁜 회원가입 버튼 -->
+    <button class="login-button" type="submit">회원가입</button>
+
+</form>
+</body>
+</html>

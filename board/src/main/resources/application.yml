@@ -1,0 +1,39 @@
+#### ??
+server:
+  port: 8080
+
+
+####???
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  output:
+    ansi:
+      enables: always
+
+  #### DB ??
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521.xe
+    username: jisun
+    password: 1234
+
+
+
+#### mybatis
+mybatis:
+  config-location: classpath:mapper/config/config.xml
+  mapper-locations:  classpath:mapper/sql/**/*.xml
+
+#### log ?? fatal > error > warn > info > debug
+logging:
+  level:
+    root: error
+    '[com.jisun.board]': info
+
+
+
+

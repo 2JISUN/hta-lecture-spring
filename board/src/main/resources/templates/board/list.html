@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <p>1. 데이터를 받았을 경우 : list</p>
+    <p>2. 데이터를 받지 않았을 경우 : ❓</p>
+    <h2 th:text="${title}">❓</h2>
+
+
+    <ul>
+        <li th:each="boardItem, status : ${boardList}">
+            <dl>
+                <dt>글 번호</dt>
+                <dd th:text="${status.index}"></dd>
+
+                <dt>이름</dt>
+                <dd th:text="${boardItem.name}"></dd>
+
+                <dt >제목</dt>
+                <dd th:text="${boardItem.title}"></dd>
+
+                <dt>내용</dt>
+                <dd th:text="${boardItem.content}"></dd>
+            </dl>
+        </li>
+    </ul>
+
+
+
+</body>
+</html>

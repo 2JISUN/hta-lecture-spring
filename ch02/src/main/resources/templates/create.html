@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /* 그라데이션 배경색 스타일 */
+        body {
+            background: linear-gradient(to bottom, #87CEEB, #1E90FF);
+            background-attachment: fixed;
+            background-size: 100% 100%;
+        }
+
+        /* 폼 스타일 */
+        form {
+            background: rgba(255, 255, 255, 0.8); /* 폼 배경에 투명도 적용 */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* 입력 필드 스타일 */
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* 제출 버튼 스타일 */
+        input[type="submit"] {
+            background-color: #87CEEB;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* 버튼 호버 효과 */
+        input[type="submit"]:hover {
+            background-color: #1E90FF;
+        }
+    </style>
+</head>
+<body>
+<form action="/signup"
+      method="post">
+
+    <div>
+    <label for="userid">사용자 아이디</label>
+    <input type="text" id="userid" name="userid" ><br><br>
+    </div>
+
+    <div>
+    <label for="password">사용자 비밀번호</label>
+    <input type="password" id="password" name="password" ><br><br>
+    </div>
+
+    <div>
+    <label for="name">사용자 이름</label>
+    <input type="text" id="name" name="name" ><br><br>
+    </div>
+
+     <div>
+    <label for="email">사용자 이메일</label>
+    <input type="text" id="email" name="email" ><br><br>
+    </div>
+
+    <input type="submit" value="회원가입">
+
+</form>
+
+</body>
+</html>
