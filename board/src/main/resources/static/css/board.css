@@ -1,0 +1,89 @@
+/* board.css */
+
+/* 테이블 디자인 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+thead {
+    background-color: #2196F3;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #E3F2FD; /* 짝수 행 배경색 */
+}
+
+tr:nth-child(odd) {
+    background-color: #BBDEFB; /* 홀수 행 배경색 */
+}
+
+
+/* 입력 폼 스타일 */
+form {
+    width: 80%;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #2196F3;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+p {
+    color: #FF4081;
+    font-weight: bold;
+}
+
+button[type="submit"] {
+    background-color: #FF4081;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #F50057;
+}
+
+
+/* 버튼 스타일 */
+.btn {
+    background-color: #FF4081;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #F50057;
+}

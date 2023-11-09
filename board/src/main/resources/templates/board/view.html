@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+            layout:decorate="~{/layout/layout}">
+
+
+<div layout:fragment="content">
+    <h2>지선's 방명록View</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>no</th>
+            <th>이름</th>
+            <th>제목</th>
+            <th>내용</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="boardItem, status : ${boardListView}">
+
+            <!--no-->
+            <td th:text="${status.count}">1</td>
+
+            <!--이름-->
+            <td th:text="@{boardItem.name}">이름</td>
+
+            <!--제목-->
+            <td th:text="@{boardItem.title}">제목</td>
+
+            <!--내용-->
+            <td th:text="@{boardItem.content}">내용</td>
+
+        </tr>
+        </tbody>
+
+    </table>
+
+</div>
+
+</html>

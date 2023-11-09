@@ -1,0 +1,39 @@
+/* index.css */
+
+body {
+    background-color: #E3F2FD; /* 배경색: 하늘색 */
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+.container {
+    background-color: #fff; /* 박스 배경색: 흰색 */
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+}
+
+h1 {
+    color: #2196F3; /* 제목 색상: 파란색 */
+}
+
+p {
+    color: #9C27B0; /* 텍스트 색상: 보라색 */
+}
+
+.cute-button {
+    background-color: #FF4081; /* 버튼 배경색: 핑크 */
+    color: #fff; /* 버튼 텍스트 색상: 흰색 */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.cute-button:hover {
+    background-color: #F50057; /* 호버 효과 색상: 하늘색 */
+}

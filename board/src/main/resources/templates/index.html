@@ -1,59 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>귀여운 Index 페이지</title>
-    <style>
-        body {
-            background-color: #f7e4e0; /* 배경색: 연한 핑크 */
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-        }
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout}">
 
-        .container {
-            background-color: #fff; /* 박스 배경색: 흰색 */
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px auto;
-            width: 80%;
-            max-width: 400px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
-        }
+<div layout:fragment="content">
 
-        h1 {
-            color: #ff6f61; /* 제목 색상: 분홍색 */
-        }
+        <div class="container">
+            <h1>지선's 인덱스</h1>
+            <p>방명록 남겨줘~~ 제발ㅎㅎ ✏️</p>
+            <a th:href="@{/board/list}">
+                <button type="submit">방명록 보러가기 Go 👻</button>
+            </a>
+            <p><span th:text="${name}"></span> 야(아) 고마워~^^ 또 써줘~</p>
+        </div>
 
-        p {
-            color: #9a8c98; /* 텍스트 색상: 보라색 */
-        }
-
-        /* 귀여운 버튼 스타일 */
-        .cute-button {
-            background-color: #ff6f61; /* 버튼 배경색: 분홍색 */
-            color: #fff; /* 버튼 텍스트 색상: 흰색 */
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .cute-button:hover {
-            background-color: #ff4440; /* 호버 효과 색상: 더 진한 분홍색 */
-        }
-    </style>
-</head>
-
-<body>
-<form action="/board/list"
-      method="get">
-    <div class="container">
-        <h1>지선's 홈페이지</h1>
-        <p>방명록 남겨줘~~ 제발ㅎㅎ ✏️</p>
-        <button class="cute-button">방명록 Go 👻</button>
-    </div>
-</form>
-</body>
+</div>
 
 </html>

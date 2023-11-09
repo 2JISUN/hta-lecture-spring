@@ -1,12 +1,45 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1 th:text="${title}">write</h1>
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout}">
 
-</body>
+
+
+<div layout:fragment="content">
+    <div>
+        <h2>지선's 방명록Write</h2>
+        <form method="post"
+              th:action="@{/board/write}"
+              th:object="${boardDto}">
+            <div>
+                <label for="name">이름:</label>
+                <input type="text" th:field="*{name}" >
+                <p th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}">
+                    여기에 오류 메시지 띄워주세요.
+                </p>
+            </div>
+
+            <div>
+                <label for="title">제목:</label>
+                <input type="text" th:field="*{title}" >
+                <p th:if="${#fields.hasErrors('title')}">제목은 필수 입력사항입니다.</p>
+            </div>
+
+            <div>
+                <label for="content">내용:</label>
+                <textarea th:field="*{content}" rows="4" ></textarea>
+                <p th:if="${#fields.hasErrors('content')}">내용은 필수 입력사항입니다.</p>
+            </div>
+
+            <div>
+                <button type="submit">글 다써서 제출합니다!!</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
 </html>

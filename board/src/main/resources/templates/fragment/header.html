@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout}">
+
+<div class="" th:fragment="headerFragment">
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="/image/logo.png" alt="로고">
+                <h5>지선's header</h5>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">홈</a></li>
+                    <li><a href="/board/list.html" th:href="@{/board/list(id=${id},name=${name})}">방명록</a></li>
+                    <li><a href="#">서비스</a></li>
+                    <li><a href="#">문의</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+</div>
+
+</html>
