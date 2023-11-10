@@ -5,11 +5,38 @@
 
 <mapper namespace="com.jisun.board.dao.BoardDao">
 
+    <!--list, search, pagenation-->
+    <sql id="search">
+        <if test="searchCategory != null and searchInput != '' ">
+            <choose>
+                <when test="searchCategory=='all'">
+                    where (title    like '%' || #{searchInput} || '%') or
+                          (name     like '%' || #{searchInput} || '%') or
+                          (content  like '%' || #{searchInput} || '%')
+                </when>
+                <when test="searchCategory=='title'">
+                    where title like '%' || #{searchInput} || '%'
+                </when>
+                <when test="searchCategory=='name'">
+                    where name like '%' || #{searchInput} || '%'
+                </when>
+                <when test="searchCategory=='content'">
+                    where content like '%' || #{searchInput} || '%'
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+
     <select id="selectBoardList"
-            resultType="BoardDto">
+            resultType="BoardDto"
+            parameterType="HashMap">
         select * from board
+        <include refid="search"></include>
     </select>
 
+
+    <!--view-->
     <select id="selectBoardView"
             parameterType="Integer"
             resultType="BoardDto">
@@ -19,6 +46,7 @@
     </select>
 
 
+    <!--Write-->
     <insert id="insertBoardWrite"
             parameterType="BoardDto">
     insert into board
@@ -28,7 +56,19 @@
             #{content},
             sysdate)
     </insert>
-    
+
+    <!--modify-->
+    <update id="updateBoardModify"
+            parameterType="BoardDto">
+    update board
+    set name=#{name},
+        title=#{title},
+        content=#{content}
+    where id=#{id}
+    </update>
+
+
+    <!--delete-->
     <delete id="deleteBoard"
             parameterType="Integer">
     delete from board

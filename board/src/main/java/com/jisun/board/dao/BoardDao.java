@@ -3,7 +3,10 @@ package com.jisun.board.dao;
 import com.jisun.board.dto.BoardDto;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 // dao가 db에 dto 입출력
@@ -11,14 +14,17 @@ import java.util.List;
 public interface BoardDao {
 
 
-    //List
-    public List<BoardDto> selectBoardList();
+    //List+search
+    public List<BoardDto> selectBoardList(Map<String, Object> hashMap);
 
     //View
-    public List<BoardDto> selectBoardView(Integer id);
+    public BoardDto selectBoardView(Integer id);
 
     //Write
     Integer insertBoardWrite(BoardDto boardDto);
+
+    //Modify
+    Integer updateBoardModify(BoardDto boardDto);
 
 
     //Delete

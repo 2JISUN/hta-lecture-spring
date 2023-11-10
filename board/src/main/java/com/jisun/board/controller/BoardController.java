@@ -27,20 +27,50 @@ public class BoardController {
 
 
     @GetMapping("/list") // /board/list
-    public String boardList(Model model){
-        List<BoardDto> boardListList = boardService.selectBoardList();
+    public String boardList(Model model,
+                            @RequestParam(required = false) String searchCategory,
+                            @RequestParam(required = false) String searchInput){
+        log.info("searchCategory==={}, searchInput==={}", searchCategory,searchInput);
+        List<BoardDto> boardListList = boardService.selectBoardList(searchCategory,searchInput);
         model.addAttribute("boardListList",boardListList);
         return "/board/list"; //html
     }
 
+
+
+
+
     @GetMapping("/view/{id}")
     public String boardView(@PathVariable Integer id,
                             Model model){
-        List<BoardDto> boardViewList = boardService.selectBoardView(id);
-        model.addAttribute("boardViewList", boardViewList);
         log.info("boardView==={}",id);
+        BoardDto boardViewDto = boardService.selectBoardView(id);
+        model.addAttribute("boardViewDto", boardViewDto);
         return "/board/view";
     }
+
+
+
+/*    @GetMapping("/view/{id}")
+    @ResponseBody
+    public Map<String, Object> getOneBoard(@PathVariable int id) {
+        log.info("getOneBoard==={}",id);
+        BoardDto boardDto = boardService.getOneBoard(id);
+        Map<String, Object> resultMap = new HashMap<>();
+        if(boardDto!=null){
+            resultMap.put("isState","ok");
+            resultMap.put("viewData",boardDto);
+        } else {
+            resultMap.put("isState", "fail");
+            resultMap.put("viewData",null);
+        }
+        return  resultMap;
+    }*/
+
+
+
+
+
 
 
     @GetMapping("/write") // /board/write
@@ -49,6 +79,10 @@ public class BoardController {
         return "/board/write";
     }
 
+
+
+
+
     @PostMapping("/write") // /board/write
     public String boardWriteProcess(@Valid @ModelAttribute
                                     BoardDto boardDto,
@@ -56,12 +90,13 @@ public class BoardController {
                                     Model model,
                                     RedirectAttributes redirectAttributes
                                     ){
-        if(bindingResult.hasErrors()){
+        if(bindingResult.hasErrors()){ //th:errors="*{name}
             log.info("에러있을유");
             model.addAttribute("boardDto",boardDto);
             return "/board/write";
         }
         int resultInt = boardService.insertBoardWrite(boardDto);
+
         if (resultInt>0) {
             ModalDto modalDto = ModalDto.builder()
                     .isState("success")
@@ -71,11 +106,63 @@ public class BoardController {
             redirectAttributes.addFlashAttribute("modalDto", modalDto);
         }
 
-        boardService.insertBoardWrite(boardDto);
+        //boardService.insertBoardWrite(boardDto);
         redirectAttributes.addFlashAttribute("boardDto", boardDto  );
 
-        return "redirect:/"; //리다이렉트 해주는 이유는? 안해주면 url 안바뀜;;;;
+        return "redirect:/board/list"; //리다이렉트 해주는 이유는? 안해주면 url 안바뀜;;;;
         }
+
+
+    @GetMapping("/modify/{id}")
+    public String boardModify(@PathVariable Integer id,
+                              Model model){
+        log.info("boardView==={}",id);
+
+        model.addAttribute("boardDto", new BoardDto());
+        BoardDto boardViewDto = boardService.selectBoardView(id);
+        model.addAttribute("boardViewDto", boardViewDto);
+        log.info("boardViewDto==={}",boardViewDto);
+        return "/board/modify";
+    }
+
+
+
+
+
+    @RequestMapping("/modify/{id}")
+    public String boardModifyProcess(@Valid @ModelAttribute
+                                     @PathVariable Integer id,
+                                     BoardDto boardDto,
+                                     BindingResult bindingResult, //오류검증
+                                     Model model,
+                                     RedirectAttributes redirectAttributes){
+        if(bindingResult.hasErrors()){ //th:errors="*{name}
+            log.info("에러있을유");
+            model.addAttribute("boardDto",boardDto);
+            return "/board/modify/{id}";
+        }
+
+        Integer resultInteger = boardService.updateBoardWrite(boardDto);
+        if (resultInteger>0) {
+            ModalDto modalDto = ModalDto.builder()
+                    .isState("success")
+                    .title("방명록 수정해줬구나 최고야^^ 삭제는하지마 ㅡㅡ흥")
+                    .msg("내가 쓴 글 보러가기")
+                    .build();
+            redirectAttributes.addFlashAttribute("modalDto", modalDto);
+        }
+
+        //boardService.insertBoardWrite(boardDto);
+        redirectAttributes.addFlashAttribute("boardDto", boardDto  );
+
+        return "redirect:/board/view"; //리다이렉트 해주는 이유는? 안해주면 url 안바뀜;;;;
+    }
+
+
+
+
+
+
 
 
 
@@ -91,8 +178,5 @@ public class BoardController {
         }
         return resultMap;
     }
-
-
-
 }
 

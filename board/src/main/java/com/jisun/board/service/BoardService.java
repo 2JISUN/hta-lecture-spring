@@ -6,7 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 @Service
@@ -18,22 +21,36 @@ public class BoardService {
     private final BoardDao boardDao;
 
 
-    public List<BoardDto> selectBoardList(){
-        List<BoardDto> boardListList = boardDao.selectBoardList();
+    //list + search
+    public List<BoardDto> selectBoardList(String searchCategory,
+                                          String searchInput){
+        Map<String, Object> resultHashMap = new HashMap<>();
+        resultHashMap.put("searchCategory", searchCategory);
+        resultHashMap.put("searchInput", searchInput);
+        List<BoardDto> boardListList = boardDao.selectBoardList(resultHashMap);
         return boardListList;
     }
 
-    public List<BoardDto> selectBoardView(Integer id){
-        List<BoardDto> boardViewList = boardDao.selectBoardView(id);
-        return boardViewList;
+    //view
+    public BoardDto selectBoardView(Integer id){
+        BoardDto boardViewDto = boardDao.selectBoardView(id);
+        return boardViewDto;
     }
 
 
+    //write
     public Integer insertBoardWrite(BoardDto boardDto){
         Integer resultInteger = boardDao.insertBoardWrite(boardDto);
         return resultInteger;
     }
 
+    //modify
+    public Integer updateBoardWrite(BoardDto boardDto){
+        Integer resultInteger = boardDao.updateBoardModify(boardDto);
+        return resultInteger;
+    }
+
+    //delete
     public Integer deleteBoard(Integer id){
         Integer resultInteger = boardDao.deleteBoard(id);
         return resultInteger;
