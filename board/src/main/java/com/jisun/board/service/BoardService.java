@@ -21,15 +21,32 @@ public class BoardService {
     private final BoardDao boardDao;
 
 
-    //list + search
+    //list + search + pagination
     public List<BoardDto> selectBoardList(String searchCategory,
-                                          String searchInput){
+                                          String searchInput,
+                                          int startIndex,
+                                          int pageSize){
+
         Map<String, Object> resultHashMap = new HashMap<>();
+        /*검색*/
         resultHashMap.put("searchCategory", searchCategory);
         resultHashMap.put("searchInput", searchInput);
+
+        /*페이지네이션*/
+        resultHashMap.put("startIndex", startIndex);
+        resultHashMap.put("pageSize", pageSize);
+
         List<BoardDto> boardListList = boardDao.selectBoardList(resultHashMap);
         return boardListList;
     }
+
+    //list 총 개수
+    public Integer selectBoardCount(){
+        Integer resultInteger = boardDao.selectBoardCount();
+        return resultInteger;
+    }
+
+
 
     //view
     public BoardDto selectBoardView(Integer id){

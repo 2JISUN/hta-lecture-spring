@@ -2,6 +2,7 @@ package com.jisun.board.controller;
 
 import com.jisun.board.dto.BoardDto;
 import com.jisun.board.dto.ModalDto;
+import com.jisun.board.dto.PageDto;
 import com.jisun.board.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @Slf4j
@@ -26,13 +29,31 @@ public class BoardController {
     private final BoardService boardService;
 
 
+
     @GetMapping("/list") // /board/list
     public String boardList(Model model,
                             @RequestParam(required = false) String searchCategory,
-                            @RequestParam(required = false) String searchInput){
-        log.info("searchCategory==={}, searchInput==={}", searchCategory,searchInput);
-        List<BoardDto> boardListList = boardService.selectBoardList(searchCategory,searchInput);
+                            @RequestParam(required = false) String searchInput,
+
+                            @RequestParam(defaultValue = "1") int page){
+
+        int totalListCnt = boardService.selectBoardCount(); //전체 글수
+        PageDto pageDto = new PageDto(page,totalListCnt);//전체 글수 당 page수를 입력
+        int startIndex = pageDto.getStartIndex();
+        int pageSize = pageDto.getPageSize();
+
+        List<BoardDto> boardListList = boardService.selectBoardList(searchCategory, //검색
+                                                                    searchInput,    //검색
+                                                                    startIndex,     //페이지네이션
+                                                                    pageSize);      //페이지네이션
         model.addAttribute("boardListList",boardListList);
+        model.addAttribute("pagination",pageDto);
+
+/*        System.out.println("전체 글수 : " + pageDto.getTotalListCnt()
+                            + "전체 페이지 : " + pageDto.getPage()
+                            + "시작 페이지 : " + pageDto.getStartPage()
+                            + "끝 페이지 : " + pageDto.getEndPage());*/
+
         return "/board/list"; //html
     }
 

@@ -21,37 +21,33 @@
     </footer>
 
     <th:block th:if="${modalDto!=null}">
-        <div class="modal fade" tabindex="-1" id="myModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" th:text="${modalDto.title}">Modal title</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p th:text="${modalDto.msg}">Modal body text goes here.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
+
+        <!-- 모달 창 -->
+        <div id="myModal" class="hidden" >
+            <div class="modal-content" id="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="modalTitle" th:text="${modalDto.title}">Modal Title</h2>
+                <p id="modalMsg" th:text="${modalDto.msg}">This is a modal!</p>
+                <button id="noBtn">아니오</button>
+                <button id="yesBtn">네</button>
             </div>
         </div>
+
+
         <!-- 타임리프에서 자바스크립트에 서버에서 내려준 변수사용하고싶으면....    -->
         <script th:inline="javascript">
-
             const isState = [[${modalDto.isState}]];
-            const myModal = new bootstrap.Modal("#myModal");
             if(isState==="success") {
-                myModal.show();
+                 // 버튼 클릭 이벤트 핸들러
+                 $('#btn').on('click', function(e) {
+                    // 버튼이 클릭되면 모달을 엽니다.
+                    $('#myModal').modal('show');
+                });
             }
         </script>
+
     </th:block>
 
-
 </div>
-
-
 
 </html>

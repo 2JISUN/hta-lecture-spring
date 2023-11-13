@@ -14,8 +14,11 @@ import java.util.Objects;
 public interface BoardDao {
 
 
-    //List+search
+    //List+search+pagination
     public List<BoardDto> selectBoardList(Map<String, Object> hashMap);
+
+    //List의 총 개수
+    public Integer selectBoardCount();
 
     //View
     public BoardDto selectBoardView(Integer id);

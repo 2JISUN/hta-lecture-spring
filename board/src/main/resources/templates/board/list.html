@@ -8,6 +8,7 @@
     <h2>지선's 방명록list</h2>
 
 
+    <!--글 목록-->
     <table>
         <thead>
             <tr>
@@ -20,6 +21,7 @@
 
         <tbody>
             <tr th:each="boardItem, status : ${boardListList}">
+
                 <!--no-->
                 <td th:text="${status.count}">no</td>
 
@@ -37,20 +39,20 @@
 
                 <!--삭제-->
                 <td>
-                    <button class="btn"
+                    <button class="btn" id="btn" th:id="btn"
                             th:attrappend="data-idx=${boardItem.id}">삭제</button>
                 </td>
             </tr>
         </tbody>
-
     </table>
 
     <div>
         <a th:href="@{/board/write}">
-            <button type="submit">글 쓰기</button>
+            <button type="submit" th:id="btn" class="btn">글 쓰기</button>
         </a>
     </div>
 
+    <!-- 검색 -->
     <div>
         <form id="search-form"
                 method="get"
@@ -70,30 +72,55 @@
         </form>
     </div>
 
-<!-- 페이지 내에서 Ajax 요청을 보내기 위한 스크립트 코드 -->
-<script th:inline="javascript">
-    // 버튼 클릭 이벤트 핸들러
-    $('.btn').on('click', function(e) {
-        var idx = $(this).data('idx');
 
-        // Ajax 요청 보내기
-        $.ajax({
-            type: 'GET',
-            url: '/board/delete/' + idx,
-            success: function(response) {
-                if (response.isDelete === 'ok') {
-                    // 삭제에 성공한 경우, 페이지 새로고침
-                    location.reload();
-                } else {
-                    alert('삭제 실패');
-                }
-            },
-            error: function() {
-                alert('서버 오류');
-            }
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <th:block th:if="${pagination.getTotalListCnt() != 0}">
+            <th:block th:if="${pagination.getPage() != 1}">
+                <a th:href="@{/board/list(page=1)}">맨앞</a>
+                <a th:href="@{/board/list(page=${pagination.getPreBlock()})}">⬅️</a>
+            </th:block>
+        </th:block>
+
+        <a th:each="page: ${#numbers.sequence(pagination.getStartPage(), pagination.getEndPage())}">
+            <a th:text="${page}" th:href="@{/board/list(page=${page})}" th:classappend="${page == pagination.getPage()} ? 'active'"></a>
+        </a>
+
+        <th:block th:if="${pagination.getTotalListCnt() != 0}">
+            <th:block th:if="${pagination.getPage() != pagination.getTotalPageCnt()}">
+                <a th:href="@{/board/list(page=${pagination.getNextBlock()})}">➡️</a>
+                <a th:href="@{/board/list(page=${pagination.getTotalPageCnt()})}">맨뒤</a>
+            </th:block>
+        </th:block>
+    </div>
+
+
+
+
+    <!-- 페이지 내에서 Ajax 요청을 보내기 위한 스크립트 코드 -->
+    <script th:inline="javascript">
+        // 버튼 클릭 이벤트 핸들러
+        $('#btn').on('click', function(e) {
+            // 버튼이 클릭되면 모달을 엽니다.
+            $('#myModal').modal('show');
         });
-    });
-</script>
+
+        // 모달 열릴 때 이벤트 핸들러
+        $('#myModal').on('shown.bs.modal', function() {
+            // 모달이 열릴 때 실행되는 코드
+            console.log('모달이 열렸습니다.');
+
+            // 여기에 모달이 열릴 때 필요한 추가 작업을 추가하세요.
+        });
+
+        // 모달 닫힐 때 이벤트 핸들러
+        $('#myModal').on('hidden.bs.modal', function() {
+            // 모달이 닫힐 때 실행되는 코드
+            console.log('모달이 닫혔습니다.');
+
+            // 여기에 모달이 닫힐 때 필요한 추가 작업을 추가하세요.
+        });
+    </script>
 
 
 </div>
