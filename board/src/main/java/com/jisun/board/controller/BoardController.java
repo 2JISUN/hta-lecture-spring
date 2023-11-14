@@ -27,6 +27,7 @@ import java.util.stream.IntStream;
 public class BoardController {
 
     private final BoardService boardService;
+    //private final BoardDto boardDto;
 
 
 
@@ -46,13 +47,8 @@ public class BoardController {
                                                                     searchInput,    //검색
                                                                     startIndex,     //페이지네이션
                                                                     pageSize);      //페이지네이션
-        model.addAttribute("boardListList",boardListList);
-        model.addAttribute("pagination",pageDto);
-
-/*        System.out.println("전체 글수 : " + pageDto.getTotalListCnt()
-                            + "전체 페이지 : " + pageDto.getPage()
-                            + "시작 페이지 : " + pageDto.getStartPage()
-                            + "끝 페이지 : " + pageDto.getEndPage());*/
+        model.addAttribute("boardListList", boardListList);
+        model.addAttribute("pagination", pageDto);
 
         return "/board/list"; //html
     }
@@ -121,8 +117,10 @@ public class BoardController {
         if (resultInt>0) {
             ModalDto modalDto = ModalDto.builder()
                     .isState("success")
-                    .title("방명록을 남겨주어서 참 고마워^^ 잊지 않을게")
-                    .msg("내가 쓴 글 보러가기")
+                    .title("방명록 써줘서 ㄳㄳ")
+                    .msg("내가 쓴 글 보러갈까요?")
+                    .btnMsgClose("싫어!!!!")
+                    .btnMsgOpen("좋아🩵")
                     .build();
             redirectAttributes.addFlashAttribute("modalDto", modalDto);
         }
@@ -150,8 +148,9 @@ public class BoardController {
 
 
 
-    @RequestMapping("/modify/{id}")
-    public String boardModifyProcess(@Valid @ModelAttribute
+    @PostMapping("/modify")
+    public String boardModifyProcess(@Valid
+                                     @ModelAttribute
                                      @PathVariable Integer id,
                                      BoardDto boardDto,
                                      BindingResult bindingResult, //오류검증
@@ -160,7 +159,7 @@ public class BoardController {
         if(bindingResult.hasErrors()){ //th:errors="*{name}
             log.info("에러있을유");
             model.addAttribute("boardDto",boardDto);
-            return "/board/modify/{id}";
+            return "/board/modify";
         }
 
         Integer resultInteger = boardService.updateBoardWrite(boardDto);

@@ -1,0 +1,38 @@
+
+#### ?? ??
+server:
+  port: 8080
+
+#### mybatis ??
+mybatis:
+  config-location: classpath:mapper/config/config.xml
+  mapper-locations: classpath:mapper/sql/**/*.xml
+  type-aliases-package: com.jisun.gall.dto
+
+#### log ??  fatal > error > warn > info > debug
+logging:
+  level:
+    root: info
+    '[com.jisun.gall]': info
+
+
+spring:
+  output:
+    ansi:
+      enabled: always
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
+  thymeleaf:
+    cache: false
+
+  #### ???? database ??
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: jisun
+    password: 1234
+

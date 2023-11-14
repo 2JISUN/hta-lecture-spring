@@ -12,6 +12,7 @@
         <form method="post"
               th:action="@{/board/modify/{id}(id=${boardViewDto.id})}"
               th:object="${boardDto}">
+
             <div>
                 <label for="name">이름:</label>
                 <input type="text"
