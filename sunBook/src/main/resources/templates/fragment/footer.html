@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout}">
+
+<div class=""
+     th:fragment="footerFragment">
+
+    <!--푸터-->
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                    <img src="/images/logo.png">
+                </a>
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2023 Company, Inc</span>
+            </div>
+
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"></use></svg></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a></li>
+            </ul>
+        </footer>
+    </div>
+
+
+
+
+
+
+    <!--모달창-->
+    <th:block th:if="${modalDto!=null}">
+        <div class="modal fade" tabindex="-1" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" th:text="${modalDto.title}">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p th:text="${modalDto.msg}">Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                id="btnClose"
+                                data-bs-dismiss="modal"
+                                th:text="${modalDto.btnMsgClose}">Close</button>
+                        <button type="button"
+                                class="btn btn-secondary"
+                                id="btnOpen"
+                                data-bs-dismiss="modal"
+                                th:text="${modalDto.btnMsgOpen}">Open</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 타임리프에서 자바스크립트에 서버에서 내려준 변수사용하고싶으면....    -->
+        <script th:inline="javascript">
+            const isState = [[${modalDto.isState}]];
+            const myModal = new bootstrap.Modal("#myModal");
+            if (isState === "success") {
+                myModal.show();
+                // noBtn 클릭 이벤트 핸들러
+                $('#btnClose').on('click', function (e) {
+                    // noBtn이 클릭되면 모달을 숨깁니다.
+                    $('#myModal').modal('hide');
+                });
+            }
+        </script>
+    </th:block>
+
+</div>
+</html>

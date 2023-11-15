@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout}">
+
+
+
+<div layout:fragment="content">
+    <h2>지선's 방명록Write</h2>
+
+    <div class="container mt-4">
+        <h2>글쓰기 페이지</h2>
+        <form>
+            <div class="mb-3">
+                <label for="writer" class="form-label">작성자</label>
+                <input type="text" class="form-control" id="writer" name="writer" >
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">비밀번호</label>
+                <input type="password" class="form-control" id="password" name="password" >
+            </div>
+
+            <div class="mb-3">
+                <label for="relationship" class="form-label">관계</label>
+                <select class="form-select" id="relationship" name="relationship" >
+                    <option value="0">선택해주세요</option>
+                    <option value="1">가족👨‍👩‍👧‍👦</option>
+                    <option value="2">친구👻</option>
+                    <option value="3">기타🎸</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">제목</label>
+                <input type="text" class="form-control" id="title" name="title" >
+            </div>
+
+            <div class="mb-3">
+                <label for="content" class="form-label">내용</label>
+                <textarea class="form-control" id="content" name="content" rows="3" ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">방명록 제출하기!</button>
+        </form>
+    </div>
+
+
+    <script src="/js/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create( document.querySelector("#content"),{
+                ckfinder:{
+                    uploadUrl:""
+                }
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
+
+
+
+</div>
+
+</html>

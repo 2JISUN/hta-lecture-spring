@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"> <!--xml의 name space-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>지선's 홈페이지</title>
+    <!--css-->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!--js-->
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</head>
+
+
+<body>
+    <!--include-->
+    <div th:replace="~{fragment/header :: headerFragment}"></div>
+    <div layout:fragment="content"></div>
+    <div th:replace="~{fragment/footer :: footerFragment}"></div>
+    </body>
+</html>
