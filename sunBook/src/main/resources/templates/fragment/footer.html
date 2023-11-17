@@ -36,23 +36,25 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" th:text="${modalDto.title}">Modal title</h5>
+                        <h5 class="modal-title" th:text="${modalDto.titleMsg}">Modal title</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p th:text="${modalDto.msg}">Modal body text goes here.</p>
+                        <p th:text="${modalDto.contentMsg}">Modal body text goes here.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button"
                                 class="btn btn-secondary"
-                                id="btnClose"
+                                id="btnNo"
+                                name="btnNo"
                                 data-bs-dismiss="modal"
-                                th:text="${modalDto.btnMsgClose}">Close</button>
+                                th:text="${modalDto.btnNo}">Close</button>
                         <button type="button"
                                 class="btn btn-secondary"
-                                id="btnOpen"
+                                id="btnYes"
+                                name="btnYes"
                                 data-bs-dismiss="modal"
-                                th:text="${modalDto.btnMsgOpen}">Open</button>
+                                th:text="${modalDto.btnYes}">Open</button>
                     </div>
                 </div>
             </div>
@@ -61,12 +63,12 @@
 
         <!-- 타임리프에서 자바스크립트에 서버에서 내려준 변수사용하고싶으면....    -->
         <script th:inline="javascript">
-            const isState = [[${modalDto.isState}]];
+            const isState = [[${modalDto.isState}]]; //객체 가져오기
             const myModal = new bootstrap.Modal("#myModal");
             if (isState === "success") {
                 myModal.show();
                 // noBtn 클릭 이벤트 핸들러
-                $('#btnClose').on('click', function (e) {
+                $('#btnNo').on('click', function (e) {
                     // noBtn이 클릭되면 모달을 숨깁니다.
                     $('#myModal').modal('hide');
                 });

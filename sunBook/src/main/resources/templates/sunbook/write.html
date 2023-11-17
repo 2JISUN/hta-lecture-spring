@@ -10,58 +10,122 @@
     <h2>지선's 방명록Write</h2>
 
     <div class="container mt-4">
+
         <h2>글쓰기 페이지</h2>
-        <form>
-            <div class="mb-3">
-                <label for="writer" class="form-label">작성자</label>
-                <input type="text" class="form-control" id="writer" name="writer" >
+        <form class="row gx-3 gy-2 align-items-center"
+              method="post"
+              th:action="@{/sunbook/write}"
+              th:object="${sunBookDto}">
+
+            <div class="col-sm-3">
+                <label class="visually-hidden" for="nickname">닉네임</label>
+                <input type="text" class="form-control"
+
+                       th:field="*{nickname}"
+                       placeholder="닉네임 입력">
+                <p th:if="${#fields.hasErrors('nickname')}"
+                   th:errors="*{nickname}">
+                    오류메시지
+                </p>
+            </div>
+            <div class="col-sm-3">
+                <label class="visually-hidden" for="password">비밀번호</label>
+                <div class="input-group">
+                    <div class="input-group-text">❤️</div>
+                    <input type="text"
+                           class="form-control"
+
+                           th:field="*{password}"
+                           placeholder="비밀번호">
+                </div>
+                <p th:if="${#fields.hasErrors('password')}"
+                   th:errors="*{password}">
+                    오류메시지
+                </p>
             </div>
 
-            <div class="mb-3">
-                <label for="password" class="form-label">비밀번호</label>
-                <input type="password" class="form-control" id="password" name="password" >
-            </div>
-
-            <div class="mb-3">
-                <label for="relationship" class="form-label">관계</label>
-                <select class="form-select" id="relationship" name="relationship" >
-                    <option value="0">선택해주세요</option>
-                    <option value="1">가족👨‍👩‍👧‍👦</option>
-                    <option value="2">친구👻</option>
-                    <option value="3">기타🎸</option>
+            <div class="col-sm-3">
+                <label class="visually-hidden" for="relationship">관계</label>
+                <select class="form-select"
+                        name="relationship" id="relationship">
+                    <option selected>관계 선택하기</option>
+                    <option th:value="1">가족👨‍👩‍👧‍👦</option>
+                    <option th:value="2">친구👻</option>
+                    <option th:value="3">기타🎸</option>
                 </select>
+            </div>
+
+
+            <div class="col-auto">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="autoSizingCheck2">
+                    <label class="form-check-label" for="autoSizingCheck2">
+                        Remember me
+                    </label>
+                </div>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">닉네임 중복 확인</button>
             </div>
 
             <div class="mb-3">
                 <label for="title" class="form-label">제목</label>
-                <input type="text" class="form-control" id="title" name="title" >
+                <input type="text" class="form-control"
+
+                       th:field="*{title}">
+                <p th:if="${#fields.hasErrors('title')}"
+                   th:errors="*{title}">
+                    오류메시지
+                </p>
             </div>
 
             <div class="mb-3">
                 <label for="content" class="form-label">내용</label>
-                <textarea class="form-control" id="content" name="content" rows="3" ></textarea>
+                <textarea class="form-control" rows="3"
+
+                          th:field="*{content}">
+
+                </textarea>
+                <p th:if="${#fields.hasErrors('content')}"
+                   th:errors="*{content}">
+                    오류메시지
+                </p>
+
+            </div>
+
+
+            <div class="input-group mb-3">
+                <input type="file" class="form-control"
+                       id="picture" name="picture"
+                       th:field="*{picture}"
+                       onchange="readURL(this);">
+                <label class="input-group-text" for="picture">사진첨부</label>
+            </div>
+
+            <div>
+                <img id="preview" />
             </div>
 
             <button type="submit" class="btn btn-primary">방명록 제출하기!</button>
         </form>
     </div>
 
-
-    <script src="/js/ckeditor.js"></script>
-    <script>
-        ClassicEditor
-            .create( document.querySelector("#content"),{
-                ckfinder:{
-                    uploadUrl:""
-                }
-            } )
-            .catch( error => {
-                console.error( error );
-            } );
+    <!--사진 미리보기-->
+    <script th:inline="javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                document.getElementById('preview').src = "";
+            }
+        }
     </script>
 
-
-
 </div>
+
 
 </html>
