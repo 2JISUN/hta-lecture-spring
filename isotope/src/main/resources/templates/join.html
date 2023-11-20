@@ -1,10 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+
+    <style>
+        .error {
+            font-size: 12px;
+            color:#f00;
+            margin-top: 10px;
+        }
+    </style>
+
+
 </head>
 <body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mt-5 mb-5">JOIN</h2>
 
+            <form action="" th:action="@{/member/join}" method="post" th:object="${memberDto}">
+                <div class="mb-3">
+                    <label for="userId" class="form-label">id</label>
+                    <input type="text" class="form-control" id="userId" placeholder="userId"
+                           th:field="*{userId}">
+                    <div class="error" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">
+                        오류 메세지...</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">name</label>
+                    <input type="text" class="form-control" id="name" placeholder="name"
+                           th:field="*{name}">
+                    <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                        오류 메세지...</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">email</label>
+                    <input type="text" class="form-control" id="email" placeholder="email"
+                           th:field="*{email}">
+                    <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                        오류 메세지...</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">password</label>
+                    <input type="password" class="form-control" id="password" placeholder="password"
+                           th:field="*{password}">
+                    <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                        오류 메세지...</div>
+                </div>
+
+                <!--<div class="mb-3">
+                    <label for="age" class="form-label">age</label>
+                    <input type="text" class="form-control" id="age" placeholder="age"
+                           th:field="*{age}">
+                    <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">
+                        오류 메세지...</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="birth" class="form-label">birth</label>
+                    <input type="date" class="form-control" id="birth" placeholder="birth" th:field="*{birth}">
+                    <div class="error" th:if="${#fields.hasErrors('birth')}" th:errors="*{birth}">
+                        오류 메세지...</div>
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="file" class="form-label">profile</label>
+                    <input class="form-control" type="file" id="file" name="file" th:field="*{profile}" >
+                    <div class="error" th:if="${#fields.hasErrors('profile')}" th:errors="*{profile}">
+                        오류 메세지...</div>
+                </div>-->
+                <div class="d-flex justify-content-center mt-5">
+                    <button class="btn btn-primary">confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
