@@ -1,25 +1,25 @@
 package com.jisun.board.controller;
 
+import com.jisun.board.dto.ModalDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Slf4j
 public class HomeController {
-
     @GetMapping("/")
-    public String index(@ModelAttribute("name") String name, //redirect로 받아온 값
-                        Model model){
-        model.addAttribute("name", name);
-        log.info("addFlashAttributes로 보낸==={}", name);
+    public String index(@ModelAttribute("modalDto") ModalDto modalDto, Model model) {
+        //model.addAttribute("name",name);
+        //model.addAttribute("age",age);
+
+
+//        log.info("addFlashAttribute로 보낸 name==={}",name);
+//        log.info("addAttribute로 보낸 age==={}",age);
+        model.addAttribute("modalDto",modalDto);
         return "index";
     }
-
-
-
-
-
 }

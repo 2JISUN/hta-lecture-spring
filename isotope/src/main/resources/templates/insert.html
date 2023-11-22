@@ -23,8 +23,12 @@
         <div class="col-md-6">
             <h2 class="mt-5 mb-5">insert</h2>
 
-            <form action="" th:action="@{/isotope/insert}" th:object="${isotopeDto}" method="post"
+            <form action=""
+                  method="post"
+                  th:action="@{/isotope/insert}"
+                  th:object="${isotopeDto}"
                   enctype="multipart/form-data">
+
                 <div th:if="${#fields.hasGlobalErrors()}">
                     <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
                 </div>

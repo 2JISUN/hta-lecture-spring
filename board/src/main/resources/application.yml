@@ -1,42 +1,37 @@
-#### 내장 웹 서버의 설정을 지정
 server:
   port: 8080
 
-
-#### 스프링 설정
 spring:
-  #재실행 안해도 리로드
+  #  mvc:
+  #    view:
+  #      prefix: /WEB-INF/views
+  #      suffix: .jsp
+  #  messages:
+  #    basename: errors,messages
   devtools:
     livereload:
       enabled: true
     restart:
       enabled: true
-  #콘솔창 색상
-  output:
-    ansi:
-      enables: always
-  #DB
+
+  thymeleaf:
+    cache: false
+
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:@localhost:1521:xe
     username: jisun
     password: 1234
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
 
-
-#### mybatis 설정
 mybatis:
-  config-location: classpath:mapper/config/config.xml
-  mapper-locations:  classpath:mapper/sql/**/*.xml
+  config-location:  classpath:mapper/config/config.xml
+  mapper-locations: classpath:mapper/sql/**/*.xml
+  #type-aliases-package: com.jisun.gallery.dto
 
-
-
-#### log 레벨 설정 : fatal > error > warn > info > debug
-logging:
-  level:
-    root: error
-    '[com.jisun.board]': info
-
-
-
-
+file:
+  path: C:/upload/

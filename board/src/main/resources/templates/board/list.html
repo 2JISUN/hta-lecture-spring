@@ -1,128 +1,195 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/layout}">
-
 <div layout:fragment="content">
-    <h2>지선's 방명록list</h2>
+    <div class="container">
+        <h2 class="mb-5">LIST</h2>
 
-
-    <!--글 목록-->
-    <table>
-        <thead>
+        <table class="table">
+            <thead>
             <tr>
-                <th>no</th>
-                <th>제목</th>
-                <th>이름</th>
-                <th>삭제</th>
+                <th scope="col">no</th>
+                <th scope="col">제목</th>
+                <th scope="col">글쓴이</th>
+                <th scope="col">날짜</th>
+                <th scope="col"></th>
+
+                <!--<th scope="col">날짜</th>-->
             </tr>
-        </thead>
+            </thead>
+            <tbody>
+            <th:block  th:each="boardItem, status:${boardList}">
+                <tr class="aaa">
+                    <!--<th scope="row" th:text="${paginationMaker.count - status.count}">1</th>-->
+                    <th scope="row" th:text="${paginationMaker.count - status.index}">1</th>
+                    <td>
+                        <th:block th:if="${param.category==null}">
+                            <a href=""  th:text="${boardItem.title}"
+                               th:href="@{/board/view/{id}(id=${boardItem.id},
+                                          currentPage=${paginationMaker.criteria.currentPage})}"
 
-        <tbody>
-            <tr th:each="boardItem, status : ${boardListList}">
+                               th:attrappend="data-idx=${boardItem.id}" class="btnView">Mark</a>
+                        </th:block>
+                        <th:block th:unless="${param.category==null}">
+                            <a href=""  th:text="${boardItem.title}"
+                               th:href="@{/board/view/{id}(id=${boardItem.id},
+                                          currentPage=${paginationMaker.criteria.currentPage},category=${param.category},searchTxt=${param.searchTxt})}"
 
-                <!--no-->
-                <td th:text="${status.count}">no</td>
+                               th:attrappend="data-idx=${boardItem.id}" class="btnView">Mark</a>
+                        </th:block>
 
-                <!--제목-->
-                <td>
-                    <a th:text="${boardItem.title}"
-                       th:href="@{/board/view/{id}(id=${boardItem.id})}"
-                       th:attrappend="data-idx=${boardItem.id}" class="btnView">제목</a>
-                </td>
+                        <!--<a href=""  th:text="${boardItem.title}"
+                           th:href="@{/board/view(id=${boardItem.id})}">Mark</a>-->
+                    </td>
+                    <td th:text="${boardItem.name}">Otto</td>
+                    <!--<td th:text="${#temporals.format(boardItem.regdate, 'yyyy-MM-dd')}">Otto</td>-->
 
-                <!--이름-->
-                <td>
-                    <a th:text="${boardItem.name}">이름</a>
-                </td>
-
-                <!--삭제-->
-                <td>
-                    <button class="btn" id="btn" th:id="btn"
-                            th:attrappend="data-idx=${boardItem.id}">삭제</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div>
-        <a th:href="@{/board/write}">
-            <button type="submit" th:id="btn" class="btn">글 쓰기</button>
-        </a>
+                    <td th:text="${boardItem.regdate}">Otto</td>
+                    <td><button class="btn btn-danger" th:attrappend="data-idx=${boardItem.id}">삭제</button></td>
+                    <!--<td th:text="${boardItem.date}?: _">@mdo</td>-->
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <div class="mt-5"><a href="" class="btn btn-primary" th:href="@{/board/write}">write</a></div>
     </div>
+    <h1 th:if="${param.category==null}">null</h1>
+    <h1 th:unless="${param.category!=null}">not null</h1>
 
-    <!-- 검색 -->
-    <div>
-        <form id="search-form"
-                method="get"
-                th:action="@{/board/list}">
-            <select id="searchCategory" name="searchCategory">
-                <option value="all">전체 검색</option>
-                <option value="title">제목</option>
-                <option value="name">글쓴이</option>
-                <option value="content">내용</option>
-            </select>
-            <input type="text"
-                   id="searchInput"
-                   name="searchInput"
-                   placeholder="검색어를 입력하세요"
-                   th:value="${param.searchInput}">
-            <button type="submit">검색</button>
+    <nav aria-label="Page navigation example" class="mt-5 d-flex justify-content-center">
+        <ul class="pagination">
+            <li class="page-item" th:if="${paginationMaker.isPrev}">
+                <a class="page-link" href="#" aria-label="Previous"
+                   th:href="@{/board/list(currentPage=1)}">
+                    <span aria-hidden="true">first</span>
+                </a>
+            </li>
+            <li class="page-item" th:if="${paginationMaker.isPrev}">
+                <a class="page-link" href="#" aria-label="Previous"
+                   th:href="@{/board/list(currentPage=${paginationMaker.startPage - 1})}">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"
+                th:each="pageNum:${#numbers.sequence(paginationMaker.startPage,paginationMaker.endPage,1)}"
+                th:classappend="${paginationMaker.criteria.currentPage==pageNum?'active':''}"
+            >
+                <th:block th:if="${param.category!=null}">
+                    <a class="page-link" href="#" th:text="${pageNum}"
+                       th:href="@{/board/list(currentPage=${pageNum},
+                                              category=${param.category},
+                                              searchTxt=${param.searchTxt})}">1</a>
+                </th:block>
+                <th:block th:unless="${param.category!=null}">
+                    <a class="page-link" href="#" th:text="${pageNum}"
+                       th:href="@{/board/list(currentPage=${pageNum})}">1</a>
+                </th:block>
+
+            </li>
+            <!--다음 페이지가 있는지 없는지 따져서 보이느냐 마느냐.....-->
+            <li class="page-item" th:if="${paginationMaker.isNext}">
+                <a class="page-link" href="#" aria-label="Next"
+                   th:href="@{/board/list(currentPage=${paginationMaker.endPage+1})}">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <!--// 제일 마지막 페이지로 보내기...-->
+            <li class="page-item" th:if="${paginationMaker.isNext}">
+                <a class="page-link" href="#" aria-label="Next"
+                   th:href="@{/board/list(currentPage=${paginationMaker.lastPage})}">
+                    <span aria-hidden="true">last</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="modal fade" tabindex="-1" id="viewModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="name">외계인</p>
+                    <p class="regdate">2023-11-09 11:10:10</p>
+                    <div class="content">Modal body text goes here.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <form action="" th:action="@{/board/list}" method="get">
+            <div class="row">
+                <div class="col-4" th:with="category=${param.category}">
+                    <select class="form-select" aria-label="Default select example" name="category">
+                        <option value="all"     th:selected="${#strings.equals(category,'all')    ? true : false}">전체검색</option>
+                        <option value="title"   th:selected="${#strings.equals(category,'title')  ? true : false}">제목</option>
+                        <option value="content" th:selected="${#strings.equals(category,'content')? true : false}">내용</option>
+                        <option value="name"    th:selected="${#strings.equals(category,'name')   ? true : false}">글쓴이</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <input  type="text" class="form-control" name="searchTxt" placeholder="검색어를 입력해주세요."
+                            th:value="${param.searchTxt}">
+                </div>
+                <div class="col-2"><button class="btn btn-primary">검색</button></div>
+            </div>
         </form>
     </div>
+    <script>
+        /*const tl = gsap.timeline();
+        tl
+            .from("header img",{scale:0,ease:"elastic", duration:1.5})
+            .from("header .nav li",{x:50,opacity: 0,stagger:0.1})
+            .from(".main h2",{x:50,opacity: 0})
+            .from("table tr",{opacity:0,y:100,ease:"back",delay:0.5, stagger:0.1});*/
 
+        const viewModal = new bootstrap.Modal("#viewModal");
 
-    <!-- 페이지네이션 -->
-    <div class="pagination">
-        <th:block th:if="${pagination.getTotalListCnt() != 0}">
-            <th:block th:if="${pagination.getPage() != 1}">
-                <a th:href="@{/board/list(page=1)}">맨앞</a>
-                <a th:href="@{/board/list(page=${pagination.getPreBlock()})}">⬅️</a>
-            </th:block>
-        </th:block>
+        /*$(".btnView").on("click",function(e){
+            e.preventDefault();
+            const idx = $(this).data("idx");
+            $.ajax({
+                url:`/board/view/${idx}`,
+                success:function(data){
+                    console.log(data);
+                    if(data.isState==="ok") {
+                        viewModal.show();
+                        $("#viewModal .modal-title").text(data.viewData.title);
+                        $("#viewModal .modal-body .name").text(data.viewData.name);
+                        $("#viewModal .modal-body .regdate").text(data.viewData.regdate);
+                        $("#viewModal .modal-body .content").text(data.viewData.content);
+                    }
+                }
+            })
+            console.log(idx);
+            return false;
 
-        <a th:each="page: ${#numbers.sequence(pagination.getStartPage(), pagination.getEndPage())}">
-            <a th:text="${page}" th:href="@{/board/list(page=${page})}" th:classappend="${page == pagination.getPage()} ? 'active'"></a>
-        </a>
+        })*/
 
-        <th:block th:if="${pagination.getTotalListCnt() != 0}">
-            <th:block th:if="${pagination.getPage() != pagination.getTotalPageCnt()}">
-                <a th:href="@{/board/list(page=${pagination.getNextBlock()})}">➡️</a>
-                <a th:href="@{/board/list(page=${pagination.getTotalPageCnt()})}">맨뒤</a>
-            </th:block>
-        </th:block>
-    </div>
-
-
-
-
-    <!-- 페이지 내에서 Ajax 요청을 보내기 위한 스크립트 코드 -->
-    <script th:inline="javascript">
-        // 버튼 클릭 이벤트 핸들러
-        $('#btn').on('click', function(e) {
-            // 버튼이 클릭되면 모달을 엽니다.
-            $('#myModal').modal('show');
-        });
-
-        // 모달 열릴 때 이벤트 핸들러
-        $('#myModal').on('shown.bs.modal', function() {
-            // 모달이 열릴 때 실행되는 코드
-            console.log('모달이 열렸습니다.');
-
-            // 여기에 모달이 열릴 때 필요한 추가 작업을 추가하세요.
-        });
-
-        // 모달 닫힐 때 이벤트 핸들러
-        $('#myModal').on('hidden.bs.modal', function() {
-            // 모달이 닫힐 때 실행되는 코드
-            console.log('모달이 닫혔습니다.');
-
-            // 여기에 모달이 닫힐 때 필요한 추가 작업을 추가하세요.
-        });
+        $(".btn").on("click",function(){
+            console.log($(this).data("idx"));
+            const tr = $(this).parent().parent();
+            //const tr = $(this).closest("tr");
+            const idx = $(this).data("idx");
+            $.ajax({
+                url:`/board/delete/${idx}`,
+                method:"delete",
+                success:function(data) {
+                    console.log(data);
+                    if(data.isDelete==="ok") {
+                        tr.fadeOut();
+                    }
+                }
+            });
+        })
     </script>
-
-
 </div>
 
 </html>

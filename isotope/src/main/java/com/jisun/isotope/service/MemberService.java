@@ -19,11 +19,11 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     public int insertMember(@ModelAttribute MemberDto memberDto) {
         MemberDto inserMemberDto = MemberDto.builder()
-                .userId(memberDto.getUserId())
-                .name(memberDto.getName())
-                .email(memberDto.getEmail())
-                .password( bCryptPasswordEncoder.encode( memberDto.getPassword() ))
-                .build();
+                                            .userId(memberDto.getUserId())
+                                            .name(memberDto.getName())
+                                            .email(memberDto.getEmail())
+                                            .password( bCryptPasswordEncoder.encode( memberDto.getPassword() ))
+                                            .build();
         int result = memberDao.insertMember(inserMemberDto);
         return result;
     }

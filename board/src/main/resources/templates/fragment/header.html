@@ -1,26 +1,33 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div class="container" th:fragment="headerFragment">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <img src="/images/rudolf.png" />
+        </a>
+        <ul class="nav nav-pills">
+            <li class="nav-item"><a href="/" class="nav-link active" aria-current="page">Home</a></li>
+            <li class="nav-item"><a href="/board/list.html" th:href="@{/board/list}" class="nav-link">board</a></li>
+            <!--로그인 전-->
+            <th:block sec:authorize="!isAuthenticated()">
+                <li class="nav-item"><a href="/member/login" th:href="@{/member/login}" class="nav-link">login</a></li>
+                <li class="nav-item"><a href="/member/join" th:href="@{/member/join}" class="nav-link">join</a></li>
+            </th:block>
 
-<div class="" th:fragment="headerFragment">
-    <header>
-        <div class="container">
-            <div class="logo">
-                <img src="/image/logo.png" alt="로고">
-                <h5>지선's header</h5>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#">홈</a></li>
-                    <li><a href="/board/list.html" th:href="@{/board/list(id=${id},name=${name})}">방명록</a></li>
-                    <li><a href="#">서비스</a></li>
-                    <li><a href="#">문의</a></li>
-                </ul>
-            </nav>
-        </div>
+            <!--로그인 후-->
+            <th:block  sec:authorize="isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="/member/mypage" th:href="@{/member/mypage}"
+                       th:text="${#authentication.principal.loggedMember.name}">
+                        유저이름
+                    </a>
+                </li>
+                <li class="nav-item"><a href="/isotope/gallery" th:href="@{/isotope/gallery}" class="nav-link">사진첩</a></li>
+                <li class="nav-item"><a href="/member/logout" th:href="@{/member/logout}" class="nav-link">logout</a></li>
+            </th:block>
+        </ul>
     </header>
 </div>
-
 </html>

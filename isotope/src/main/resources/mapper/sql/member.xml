@@ -4,20 +4,24 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jisun.isotope.dao.MemberDao">
 
+    <!--회원가입-->
     <insert id="insertMember" parameterType="memberDto">
         insert into member values(
-        member_seq.nextval,
-        #{userId},
-        #{password},
-        #{name},
-        #{email},
-        'ROLE_MEMBER',
-        sysdate
+            member_seq.nextval,
+            #{userId},
+            #{password},
+            #{name},
+            #{email},
+            'ROLE_MEMBER',
+            sysdate
         )
     </insert>
 
+    <!--로그인-->
     <select id="loginMember" parameterType="String" resultType="memberDto">
-        select * from member where userId = #{username}
+        select *
+        from member
+        where userId = #{username}
     </select>
 
 

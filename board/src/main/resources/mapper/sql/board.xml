@@ -5,116 +5,67 @@
 
 <mapper namespace="com.jisun.board.dao.BoardDao">
 
-    <!--list의 search-->
+    <!--페이지네이션 조건-->
     <sql id="search">
-        <if test="searchCategory != null and searchInput != '' ">
+        <if test="category != null and searchTxt != '' ">
             <choose>
-                <when test="searchCategory=='all'">
-                    where (title    like '%' || #{searchInput} || '%') or
-                          (name     like '%' || #{searchInput} || '%') or
-                          (content  like '%' || #{searchInput} || '%')
+                <when test="category=='title'">
+                    where title like '%' || #{searchTxt} || '%'
                 </when>
-                <when test="searchCategory=='title'">
-                    where title like '%' || #{searchInput} || '%'
+                <when test="category=='name'">
+                    where name like '%' || #{searchTxt} || '%'
                 </when>
-                <when test="searchCategory=='name'">
-                    where name like '%' || #{searchInput} || '%'
+                <when test="category=='content'">
+                    where content like '%' || #{searchTxt} || '%'
                 </when>
-                <when test="searchCategory=='content'">
-                    where content like '%' || #{searchInput} || '%'
+                <when test="category=='all'">
+                    where
+                    (name like '%' || #{searchTxt} || '%') or
+                    (title like '%' || #{searchTxt} || '%') or
+                    (content like '%' || #{searchTxt} || '%')
                 </when>
             </choose>
         </if>
     </sql>
 
-
-    <!--list의 페이지네이션-->
-    <sql id="pagination">
-        ORDER BY id DESC offset #{startIndex}
-        ROWS FETCH FIRST #{pageSize}
-        ROWS ONLY
-    </sql>
-
-
-    <!--list의 글 개수-->
-    <select id="selectBoardCount"
-            resultType="Integer">
-        select count(*) as count
-        from board
+    <!--글 개수-->
+    <select id="getTotalCount" resultType="int" parameterType="Criteria">
+        select count(*) as count from board
+        <include refid="search" />
     </select>
 
 
 
-    <!--list보기-->
-    <select id="selectBoardList"
-            resultType="BoardDto"
-            parameterType="map">
-        select *
-        from board
-        <include refid="search"></include>
-        <include refid="pagination"></include>
+    <!--목록-->
+    <select id="getAllBoard" resultType="BoardDto"  parameterType="Criteria">
+        select * from (
+        select rownum as num , b.* from
+        (select * from board <include refid="search" />  order by regdate desc) b
+        )
+        where num  <![CDATA[ >= ]]> #{startPage} and num <![CDATA[ <= ]]> #{endPage}
+        <!--where num  between #{startPage} and  #{endPage}-->
+        <!-- #{속성값} 은 getter의 값을 가져온다. -->
     </select>
 
-
-
-
-
-
-
-    <select id="selectBoardPagination"
-            resultType="BoardDto"
-            parameterType="PageDto">
-        <![CDATA[
-            select * from (
-                select rownum as num , b.* from
-                    (select * from board order by regdate desc) b
-            )
-            where num >= #{startPage} and num <= #{endPage}
-        ]]>
+    <!--상세-->
+    <select id="getOneBoard" resultType="BoardDto" parameterType="int">
+        select * from board where id = #{id}
     </select>
 
-
-
-
-    <!--view-->
-    <select id="selectBoardView"
-            parameterType="Integer"
-            resultType="BoardDto">
-        select *
-        from board
-        where id = #{id}
-    </select>
-
-
-    <!--Write-->
-    <insert id="insertBoardWrite"
-            parameterType="BoardDto">
-    insert into board
-    values(board_seq.nextval,
-            #{name},
-            #{title},
-            #{content},
-            sysdate)
+    <!--글쓰기-->
+    <insert id="insertBoard" parameterType="BoardDto">
+        insert into board values(board_seq.nextval,#{name},#{title},#{content},sysdate)
     </insert>
 
-    <!--modify-->
-    <update id="updateBoardModify"
-            parameterType="BoardDto">
-    update board
-    set name=#{name},
-        title=#{title},
-        content=#{content}
-    where id=#{id}
-    </update>
-
-
-    <!--delete-->
-    <delete id="deleteBoard"
-            parameterType="Integer">
-    delete from board
-    where id = #{id}
+    <!--글삭제-->
+    <delete id="deleteBoard" parameterType="int">
+        delete from board where id = #{id}
     </delete>
 
+    <!--수정???-->
+    <update id="modifyBoard" parameterType="BoardDto">
+        update board set name=#{name}, title=#{title}, content=#{content} where id= #{id}
+    </update>
 
 
 </mapper>

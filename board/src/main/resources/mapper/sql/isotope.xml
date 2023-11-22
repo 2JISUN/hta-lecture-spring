@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jisun.board.dao.IsotopeDao">
+
+    <!--글 작성-->
+    <insert id="insertIsotope" parameterType="isotopeDto">
+        insert into isotope values(
+        isotope_seq.nextval,
+        #{title},
+        #{description},
+        #{point},
+        #{category},
+        #{original},
+        #{renamed},
+        sysdate
+        )
+    </insert>
+
+    <!--글 목록-->
+    <select id="getAllList">
+        select *
+        from isotope
+    </select>
+
+</mapper>

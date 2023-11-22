@@ -1,20 +1,10 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/layout}">
-
-<div layout:fragment="content">
-
-        <div class="container">
-            <h1>지선's 인덱스</h1>
-            <p>방명록 남겨줘~~ 제발ㅎㅎ ✏️</p>
-            <a th:href="@{/board/list}">
-                <button type="submit">방명록 보러가기 Go 👻</button>
-            </a>
-            <p><span th:text="${name}"></span> 야(아) 고마워~^^ 또 써줘~</p>
-        </div>
-
+<div layout:fragment="content" class="main">
+    <div class="container">
+        <h2>INDEX</h2>
+    </div>
 </div>
-
 </html>

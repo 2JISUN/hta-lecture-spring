@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jisun.board.dao.MemberDao">
+
+    <insert id="insertMember" parameterType="JoinDto">
+        insert into member values(
+        member_seq.nextval,
+        #{userId},
+        #{password},
+        #{name},
+        #{email},
+        'ROLE_MEMBER',
+        1,
+        sysdate
+        )
+    </insert>
+
+    <select id="loginMember" parameterType="String" resultType="JoinDto">
+        select * from member where userId = #{userId}
+    </select>
+
+    <update id="deleteMember" parameterType="LoginDto">
+        update MEMBER set status = 0 WHERE userId = #{userId}
+    </update>
+
+    <update id="updateMember" parameterType="JoinDto">
+        update member set name=#{name}, email=#{email} WHERE userId = #{userId}
+    </update>
+
+    <insert id="insertDeleteMember" parameterType="JoinDto">
+        insert into delete_member values(
+        deletemember_seq.nextval,
+        #{userId},
+        #{name},
+        sysdate
+        )
+    </insert>
+
+</mapper>

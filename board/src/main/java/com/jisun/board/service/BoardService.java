@@ -2,76 +2,70 @@ package com.jisun.board.service;
 
 import com.jisun.board.dao.BoardDao;
 import com.jisun.board.dto.BoardDto;
+import com.jisun.board.dto.Criteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
 
 @Service
 @Slf4j
-@RequiredArgsConstructor //final은 생성자 필수
+@RequiredArgsConstructor
 public class BoardService {
-    //@Autowired //생성자 없이 바로 가져오기
-
+    // spring container 에 등록된 bean을 주입받을때 쓴다.
     private final BoardDao boardDao;
 
+//    public BoardService(BoardDao boardDao) {
+//        this.boardDao = boardDao;
+//    }
 
-    //list + search + pagination
-    public List<BoardDto> selectBoardList(String searchCategory,
-                                          String searchInput,
-                                          int startIndex,
-                                          int pageSize){
+    /*public List<BoardDto> getAllBoard(String category, String searchTxt) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("category",category);
+        hashMap.put("searchTxt",searchTxt);
+        List<BoardDto> boardList = boardDao.getAllBoard(hashMap);
+        return boardList;
+    }*/
 
-        Map<String, Object> resultHashMap = new HashMap<>();
-        /*검색*/
-        resultHashMap.put("searchCategory", searchCategory);
-        resultHashMap.put("searchInput", searchInput);
-
-        /*페이지네이션*/
-        resultHashMap.put("startIndex", startIndex);
-        resultHashMap.put("pageSize", pageSize);
-
-        List<BoardDto> boardListList = boardDao.selectBoardList(resultHashMap);
-        return boardListList;
+    public List<BoardDto> getAllBoard(Criteria criteria) {
+//        HashMap<String, Object> hashMap = new HashMap<>();
+//        hashMap.put("category",category);
+//        hashMap.put("searchTxt",searchTxt);
+        List<BoardDto> boardList = boardDao.getAllBoard(criteria);
+        return boardList;
     }
 
-    //list 총 개수
-    public Integer selectBoardCount(){
-        Integer resultInteger = boardDao.selectBoardCount();
-        return resultInteger;
+    public int insertBoard(BoardDto boardDto) {
+        int result = boardDao.insertBoard(boardDto);
+        return result;
+    }
+
+    public int deleteBoard(int id) {
+        int result = boardDao.deleteBoard(id);
+        return result;
+    }
+
+    public BoardDto getOneBoard(int id) {
+        BoardDto result = boardDao.getOneBoard(id);
+        return result;
+    }
+
+    public int modifyBoard(BoardDto boardDto) {
+        int result = boardDao.modifyBoard(boardDto);
+        return result;
+    }
+
+    public int getTotalCount(Criteria criteria) {
+        int result = boardDao.getTotalCount(criteria);
+        return result;
     }
 
 
 
-    //view
-    public BoardDto selectBoardView(Integer id){
-        BoardDto boardViewDto = boardDao.selectBoardView(id);
-        return boardViewDto;
-    }
-
-
-    //write
-    public Integer insertBoardWrite(BoardDto boardDto){
-        Integer resultInteger = boardDao.insertBoardWrite(boardDto);
-        return resultInteger;
-    }
-
-    //modify
-    public Integer updateBoardWrite(BoardDto boardDto){
-        Integer resultInteger = boardDao.updateBoardModify(boardDto);
-        return resultInteger;
-    }
-
-    //delete
-    public Integer deleteBoard(Integer id){
-        Integer resultInteger = boardDao.deleteBoard(id);
-        return resultInteger;
-    }
-
+//    public BoardDto getOneBoard(String name) {
+//        BoardDto boardDto = boardDao.getOneBoard(name);
+//        return boardDto;
+//    }
 
 }

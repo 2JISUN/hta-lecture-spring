@@ -2,11 +2,12 @@
 <!DOCTYPE configuration
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-config.dtd">
-
-
 <configuration>
     <typeAliases>
         <typeAlias alias="BoardDto" type="com.jisun.board.dto.BoardDto"></typeAlias>
-        <typeAlias alias="PageDto" type="com.jisun.board.dto.PageDto"></typeAlias>
+        <typeAlias alias="Criteria" type="com.jisun.board.dto.Criteria"></typeAlias>
+        <typeAlias alias="JoinDto" type="com.jisun.board.dto.JoinDto"></typeAlias>
+        <typeAlias alias="LoginDto" type="com.jisun.board.dto.LoginDto"></typeAlias>
+        <typeAlias alias="IsotopeDto" type="com.jisun.board.dto.LoginDto"></typeAlias>
     </typeAliases>
 </configuration>

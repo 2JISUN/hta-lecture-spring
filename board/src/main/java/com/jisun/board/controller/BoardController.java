@@ -1,202 +1,260 @@
 package com.jisun.board.controller;
 
 import com.jisun.board.dto.BoardDto;
+import com.jisun.board.dto.Criteria;
 import com.jisun.board.dto.ModalDto;
-import com.jisun.board.dto.PageDto;
+import com.jisun.board.dto.ToastDto;
 import com.jisun.board.service.BoardService;
+import com.jisun.board.utils.PaginationMaker;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
+@RequestMapping("/board")
+@RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/board") //get,post 모두 인식
-@RequiredArgsConstructor //final은 생성자 필수
-
 public class BoardController {
 
+    @Value("${file.path}")
+    private String uploadFolder;
+
     private final BoardService boardService;
-    //private final BoardDto boardDto;
+
+    private final PaginationMaker paginationMaker;
 
 
 
-    @GetMapping("/list") // /board/list
-    public String boardList(Model model,
-                            @RequestParam(required = false) String searchCategory,
-                            @RequestParam(required = false) String searchInput,
+    /*게시글 목록 : 페이지네이션, 검색*/
+    @GetMapping("/list")
+    public String list(Model model, @ModelAttribute Criteria criteria) {
+        // 게시글 목록 조회
+        List<BoardDto> boardList = boardService.getAllBoard(criteria);
 
-                            @RequestParam(defaultValue = "1") int page){
+        // 페이지네이션 설정
+        paginationMaker.setCriteria(criteria);
+        paginationMaker.setTotal(boardService.getTotalCount(criteria));
 
-        int totalListCnt = boardService.selectBoardCount(); //전체 글수
-        PageDto pageDto = new PageDto(page,totalListCnt);//전체 글수 당 page수를 입력
-        int startIndex = pageDto.getStartIndex();
-        int pageSize = pageDto.getPageSize();
+        // 모델에 데이터 추가
+        model.addAttribute("boardList",boardList);
+        model.addAttribute("paginationMaker",paginationMaker);
+        //log.info("getCurrentPage==={}",paginationMaker.getCriteria().getCurrentPage());
 
-        List<BoardDto> boardListList = boardService.selectBoardList(searchCategory, //검색
-                                                                    searchInput,    //검색
-                                                                    startIndex,     //페이지네이션
-                                                                    pageSize);      //페이지네이션
-        model.addAttribute("boardListList", boardListList);
-        model.addAttribute("pagination", pageDto);
-
-        return "/board/list"; //html
+        // 게시글 목록 페이지로 이동
+        return  "/board/list";
     }
 
-
-
-
-
-    @GetMapping("/view/{id}")
-    public String boardView(@PathVariable Integer id,
-                            Model model){
-        log.info("boardView==={}",id);
-        BoardDto boardViewDto = boardService.selectBoardView(id);
-        model.addAttribute("boardViewDto", boardViewDto);
-        return "/board/view";
+    /*게시글 작성*/
+    @GetMapping("/write")
+    public String write(Model model) {
+        //model.addAttribute("title","write");
+        // 게시글 작성 페이지로 이동
+        BoardDto boardDto = BoardDto.builder().build();
+        model.addAttribute("boardDto", boardDto);
+        return  "/board/write";
     }
 
-
-
-/*    @GetMapping("/view/{id}")
-    @ResponseBody
-    public Map<String, Object> getOneBoard(@PathVariable int id) {
-        log.info("getOneBoard==={}",id);
-        BoardDto boardDto = boardService.getOneBoard(id);
-        Map<String, Object> resultMap = new HashMap<>();
-        if(boardDto!=null){
-            resultMap.put("isState","ok");
-            resultMap.put("viewData",boardDto);
-        } else {
-            resultMap.put("isState", "fail");
-            resultMap.put("viewData",null);
-        }
-        return  resultMap;
-    }*/
-
-
-
-
-
-
-
-    @GetMapping("/write") // /board/write
-    public String boardWrite(Model model){
-        model.addAttribute("boardDto", new BoardDto());
-        return "/board/write";
-    }
-
-
-
-
-
-    @PostMapping("/write") // /board/write
-    public String boardWriteProcess(@Valid @ModelAttribute
-                                    BoardDto boardDto,
-                                    BindingResult bindingResult, //오류검증
-                                    Model model,
-                                    RedirectAttributes redirectAttributes
-                                    ){
-        if(bindingResult.hasErrors()){ //th:errors="*{name}
-            log.info("에러있을유");
-            model.addAttribute("boardDto",boardDto);
+    @PostMapping("/write")
+    public String writeProcess(@Valid @ModelAttribute BoardDto boardDto,
+                               BindingResult bindingResult,
+                               Model model,
+                               RedirectAttributes redirectAttributes
+    ) {
+        // 게시글 작성 유효성 검사
+        if(bindingResult.hasErrors()){
+            model.addAttribute("boardDto", boardDto);
+            log.info("boardDto=={}",boardDto.toString());
             return "/board/write";
         }
-        int resultInt = boardService.insertBoardWrite(boardDto);
 
-        if (resultInt>0) {
+        // 게시글 저장
+        int result = boardService.insertBoard(boardDto);
+
+        // 성공적으로 저장되면 모달창 메시지 설정
+        if(result>0){
             ModalDto modalDto = ModalDto.builder()
                     .isState("success")
-                    .title("방명록 써줘서 ㄳㄳ")
-                    .msg("내가 쓴 글 보러갈까요?")
-                    .btnMsgClose("싫어!!!!")
-                    .btnMsgOpen("좋아🩵")
+                    .msg("글이 입력되었습니다.")
                     .build();
-            redirectAttributes.addFlashAttribute("modalDto", modalDto);
+            redirectAttributes.addFlashAttribute("modalDto",modalDto);
         }
 
-        //boardService.insertBoardWrite(boardDto);
-        redirectAttributes.addFlashAttribute("boardDto", boardDto  );
-
-        return "redirect:/board/list"; //리다이렉트 해주는 이유는? 안해주면 url 안바뀜;;;;
-        }
-
-
-    @GetMapping("/modify/{id}")
-    public String boardModify(@PathVariable Integer id,
-                              Model model){
-        log.info("boardView==={}",id);
-
-        model.addAttribute("boardDto", new BoardDto());
-        BoardDto boardViewDto = boardService.selectBoardView(id);
-        model.addAttribute("boardViewDto", boardViewDto);
-        log.info("boardViewDto==={}",boardViewDto);
-        return "/board/modify";
+        return "redirect:/";
     }
 
 
+    /*게시글 상세보기*/
+    @GetMapping("/view/{id}")
+    public String getOneBoard(@PathVariable int id,Model model) {
+        //log.info("getOneBoard==={}",id);
 
+        // 게시글 상세 조회
+        BoardDto boardDto = boardService.getOneBoard(id);
 
+        // 모델에 데이터 추가
+        model.addAttribute("boardDto",boardDto);
+
+        // 게시글 상세보기 페이지로 이동
+        return  "/board/view";
+    }
+
+    /*게시글 수정*/
+    @GetMapping("/modify/{id}")
+    public String modifyBoard(@PathVariable int id,Model model) {
+        log.info("getOneBoard==={}",id);
+        // 게시글 수정 페이지로 이동
+        BoardDto boardDto = boardService.getOneBoard(id);
+        model.addAttribute("boardDto",boardDto);
+        return  "/board/modify";
+    }
 
     @PostMapping("/modify")
-    public String boardModifyProcess(@Valid
-                                     @ModelAttribute
-                                     @PathVariable Integer id,
-                                     BoardDto boardDto,
-                                     BindingResult bindingResult, //오류검증
+    public String modifyProcessBoard(@Valid @ModelAttribute BoardDto boardDto,
+                                     BindingResult bindingResult,
                                      Model model,
-                                     RedirectAttributes redirectAttributes){
-        if(bindingResult.hasErrors()){ //th:errors="*{name}
-            log.info("에러있을유");
-            model.addAttribute("boardDto",boardDto);
+                                     @RequestParam int currentPage,
+                                     @RequestParam String category,
+                                     @RequestParam String searchTxt,
+                                     RedirectAttributes redirectAttributes) {
+        // 게시글 수정 유효성 검사
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("boardDto", boardDto);
             return "/board/modify";
         }
+        // 게시글 수정
+        int result = boardService.modifyBoard(boardDto);
 
-        Integer resultInteger = boardService.updateBoardWrite(boardDto);
-        if (resultInteger>0) {
+        // 성공적으로 수정되면 모달창 메시지 설정
+        if(result>0){
             ModalDto modalDto = ModalDto.builder()
                     .isState("success")
-                    .title("방명록 수정해줬구나 최고야^^ 삭제는하지마 ㅡㅡ흥")
-                    .msg("내가 쓴 글 보러가기")
+                    .title("글수정")
+                    .msg("글이 수정되었습니다.")
                     .build();
-            redirectAttributes.addFlashAttribute("modalDto", modalDto);
+            redirectAttributes.addFlashAttribute("modalDto",modalDto);
         }
-
-        //boardService.insertBoardWrite(boardDto);
-        redirectAttributes.addFlashAttribute("boardDto", boardDto  );
-
-        return "redirect:/board/view"; //리다이렉트 해주는 이유는? 안해주면 url 안바뀜;;;;
+        // 목록 페이지로 리다이렉트
+        return  "redirect:/board/list?currentPage="   + currentPage +
+                                        "&category="  + category    +
+                                        "&searchTxt=" + searchTxt;
     }
 
-
-
-
-
-
-
-
-
-    @GetMapping("/delete/{id}")
-    @ResponseBody //페이지를 따로 생성하지 않음-> String으로 받기
-    public Map<String, String> deleteBoard(@PathVariable Integer id){
-        Integer resultInteger = boardService.deleteBoard(id);
+    /*게시글 삭제 by ajax*/
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public Map<String,String> deleteBoard(@PathVariable int id) {
+        log.info("ajax로 넘어언 id==={}",id);
+        int result = boardService.deleteBoard(id);
         Map<String, String> resultMap = new HashMap<>();
-        if(resultInteger>0){
+        if(result>0){
             resultMap.put("isDelete","ok");
         } else {
-            resultMap.put("isDelete","fail");
+            resultMap.put("isDelete", "fail");
         }
         return resultMap;
     }
-}
 
+    /*게시글 삭제 by form[GET]*/
+    @GetMapping("/delete/{id}")
+    public String deleteBoard(@PathVariable int id,
+                              @RequestParam(required = false) int currentPage,
+                              RedirectAttributes redirectAttributes
+    ) {
+        log.info("currentPage==={}",currentPage);
+
+        // 게시글 삭제
+        int result = boardService.deleteBoard(id);
+
+        if(result>0) {
+            log.info("0보다 크다");
+            ModalDto modalDto = ModalDto.builder()
+                    .isState("success")
+                    .title("글삭제")
+                    .msg(id+"번째 글이 삭제되었습니다.")
+                    .build();
+            redirectAttributes.addFlashAttribute("modalDto",modalDto);
+            return "redirect:/board/list?currentPage="+currentPage;
+        }
+        log.info("0보다 작다");
+        return "redirect:/board/list?currentPage="+currentPage;
+    }
+
+    @PostMapping("/test")
+    public String test(@RequestParam int id,
+                       @RequestParam(required = false) int currentPage,
+                       RedirectAttributes redirectAttributes) {
+        log.info("currentPage==={}",currentPage);
+        int result = boardService.deleteBoard(id);
+
+        if(result>0) {
+            log.info("0보다 크다");
+            ModalDto modalDto = ModalDto.builder()
+                    .isState("success")
+                    .title("글삭제")
+                    .msg(id+"번째 글이 삭제되었습니다.")
+                    .build();
+            redirectAttributes.addFlashAttribute("modalDto",modalDto);
+            return "redirect:/board/list?currentPage="+currentPage;
+        }
+        log.info("0보다 작다");
+        return "redirect:/board/list?currentPage="+currentPage;
+    }
+
+    @PostMapping("/upload")
+    @ResponseBody
+    public Map<String,Object> upload(@RequestParam MultipartFile upload) {
+        log.info("upload===={}",upload);
+        log.info("originalFileName==={}",upload.getOriginalFilename());
+
+        String originalFile = upload.getOriginalFilename(); // 이게 진짜 파일 이름...
+        String renamedFile = null;
+        String folder =  null;
+        Date now = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        folder = simpleDateFormat.format(now);
+        File dir = new File(uploadFolder+File.separator+folder);
+        if(!dir.exists()) dir.mkdirs();
+
+        // file이름 분리하고 확장자 분리
+        String fileName = originalFile.substring(0,originalFile.lastIndexOf("."));
+        String ext = originalFile.substring(originalFile.lastIndexOf("."));
+        simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String strNow = simpleDateFormat.format(now);
+        log.info("strNow==={}",strNow);
+        renamedFile = fileName+"_"+strNow+ext;
+        Path imgFilePath = Paths.get(dir+File.separator+renamedFile);
+
+        try {
+            Files.write(imgFilePath,upload.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Map<String, Object> resultMap =  new HashMap<>();
+        resultMap.put("uploaded",true);
+        resultMap.put("url","/upload/"+folder+"/"+renamedFile);
+        return resultMap;
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public String handle(MethodArgumentTypeMismatchException exception){
+        log.info("여기로 들어온다");
+        return "/error";
+        //return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+}

@@ -34,10 +34,6 @@ public class IsotopeController {
     public String index(Model model) {
         List<IsotopeDto> boardList = isotopeService.getAllList();
         model.addAttribute("boardList",boardList);
-        /*List<Category> categoryList = new ArrayList<>();
-        categoryList.add(Category.SKETCH);
-        categoryList.add(Category.PAINT);
-        categoryList.add(Category.PHOTO);*/
         model.addAttribute("categoryList",categoryList);
 
         return "/index";
@@ -46,10 +42,6 @@ public class IsotopeController {
     @GetMapping("/insert")
     public String insert(Model model) {
         IsotopeDto isotopeDto = new IsotopeDto();
-        /*List<Category> categoryList = new ArrayList<>();
-        categoryList.add(Category.SKETCH);
-        categoryList.add(Category.PAINT);
-        categoryList.add(Category.PHOTO);*/
         model.addAttribute("categoryList",categoryList);
         model.addAttribute("isotopeDto",isotopeDto);
 
@@ -60,10 +52,7 @@ public class IsotopeController {
     @PostMapping("/insert")
     public String insertProcess(@Valid @ModelAttribute IsotopeDto isotopeDto,
                                 BindingResult bindingResult,
-                                Model model
-    ) {
-
-
+                                Model model ) {
         if(isotopeDto.getFile().isEmpty()) {
             model.addAttribute("categoryList",categoryList);
             model.addAttribute("isotopeDto",isotopeDto);
@@ -79,7 +68,6 @@ public class IsotopeController {
         log.info("result==={}",result);
         return "redirect:/";
     }
-
 
 
 }

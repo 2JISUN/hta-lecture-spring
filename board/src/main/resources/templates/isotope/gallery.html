@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout}">
+
+<div layout:fragment="content" class="main">
+
+
+<main id="main">
+    <nav id="filter">
+        <!--            //1. 여기를 서버에서 처리해서 내려받기-->
+        <ul>
+            <li data-filter="item" class="on">ALL</li>
+            <!--<li data-filter="sketch" >SKETCH</li>
+            <li data-filter="paint" >PAINT</li>
+            <li data-filter="PHOTO" >photo</li>-->
+            <th:block th:each="item:${categoryList}">
+                <li th:text="${item.kor}" th:attr="data-filter=${item.label}">photo</li>
+            </th:block>
+        </ul>
+    </nav>
+    <div>
+        <ul class="itemList">
+            <th:block th:each="item : ${boardList}">
+                <li class="item" th:classappend="${item.category}">
+                    <a href=""
+                       th:href="@{|/upload/${item.renamed}|}"
+                       data-fancybox="paint" data-caption="Single image"
+                       th:attr="data-caption=${item.title}, data-fancybox=${item.category}">
+                        <div class="img">
+                            <img src="" th:src="@{|/upload/${item.renamed}|}">
+                        </div>
+                        <div class="info">
+                            <h2 th:text="${item.title}" class="title">title</h2>
+                            <p class="desc" th:text="${item.description}">description</p>
+                            <p class="point" th:text="${item.point}">4.5</p>
+                        </div>
+                    </a>
+                </li>
+            </th:block>
+        </ul>
+    </div>
+</main>
+
+<script>
+    $("body").imagesLoaded( function() {
+        let grid = $(".itemList").isotope({
+            // options
+            itemSelector: ".item",
+            layoutMode: "masonry",
+            getSortData:{
+                point:".point",
+                title: ".title"
+            },
+            sortBy:["point","title"],
+            sortAscending: false
+        });
+
+        $("#filter ul li").on("click",function(){
+            console.log("click");
+            $(this).siblings().removeClass("on");
+            $(this).addClass("on");
+            const _filter = "."+$(this).data("filter");
+            grid.isotope({ filter: _filter });
+        })
+    })
+
+    Fancybox.bind("[data-fancybox]", {
+        Carousel: {
+            transition: "fade",
+        },
+        Thumbs: {
+            type: "classic",
+        },
+    });
+
+</script>
+
+</div>
+</html>

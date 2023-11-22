@@ -1,73 +1,44 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/layout}">
-
-
-
-<div layout:fragment="content">
-    <div>
-        <h2>지선's 방명록Write</h2>
-        <form method="post"
-              th:action="@{/board/write}"
-              th:object="${boardDto}">
-            <div>
-                <label for="name">이름:</label>
-                <input type="text"
-                       th:field="*{name}" >
-                <p th:if="${#fields.hasErrors('name')}"
-                   th:errors="*{name}">
-                    여기에 오류 메시지 띄워주세요.
-                </p>
+<div layout:fragment="content" class="main">
+    <div class="container">
+        <h2>WRITE</h2>
+        <form method="post" action="/board/write" th:action="@{/board/write}" th:object="${boardDto}">
+            <div class="mb-3">
+                <label for="title" class="form-label">title</label>
+                <input type="text" class="form-control" placeholder="title" th:field="*{title}" >
+                <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error">여기에 오류메세지 띄워주세요.</p>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">name</label>
+                <input type="text" class="form-control" placeholder="writer"  th:field="*{name}">
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error">뭐지</p>
             </div>
 
-            <div>
-                <label for="title">제목:</label>
-                <input type="text" th:field="*{title}" >
-                <p th:if="${#fields.hasErrors('title')}">제목은 필수 입력사항입니다.</p>
+            <div class="mb-3">
+                <label for="content" class="form-label">content</label>
+                <textarea class="form-control" rows="5" th:field="*{content}" id="content"></textarea>
+                <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="error">짜증나.</p>
             </div>
 
-            <div>
-                <label for="content">내용:</label>
-                <textarea th:field="*{content}" rows="4" ></textarea>
-                <p th:if="${#fields.hasErrors('content')}">내용은 필수 입력사항입니다.</p>
-            </div>
-
-            <div>
-                <button type="submit" class="btn" id="btn">글 다써서 제출합니다!!</button>
+            <div class="mt-5">
+                <button class="btn btn-primary" id="btnSubmit">submit</button>
             </div>
         </form>
     </div>
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create( document.querySelector( "#content" ),{
+                ckfinder:{
+                    uploadUrl:"/board/upload"
+                }
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
 </div>
-
-<!-- 페이지 내에서 Ajax 요청을 보내기 위한 스크립트 코드 -->
-<!--<script th:inline="javascript">
-    // 버튼 클릭 이벤트 핸들러
-    $('#btn').on('click', function(e) {
-        // 버튼이 클릭되면 모달을 엽니다.
-        $('#myModal').modal('show');
-    });
-
-    // 모달 열릴 때 이벤트 핸들러
-    $('#myModal').on('shown.bs.modal', function() {
-        // 모달이 열릴 때 실행되는 코드
-        console.log('모달이 열렸습니다.');
-
-        // 여기에 모달이 열릴 때 필요한 추가 작업을 추가하세요.
-    });
-
-    // 모달 닫힐 때 이벤트 핸들러
-    $('#myModal').on('hidden.bs.modal', function() {
-        // 모달이 닫힐 때 실행되는 코드
-        console.log('모달이 닫혔습니다.');
-
-        // 여기에 모달이 닫힐 때 필요한 추가 작업을 추가하세요.
-    });
-</script>-->
-
-
-
-
-
 </html>

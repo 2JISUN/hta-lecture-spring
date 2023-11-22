@@ -13,7 +13,6 @@
     <script src="/js/imagesloaded.pkgd.min.js"></script>
     <script src="/js/isotope.pkgd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-
 </head>
 <body>
 <header id="header">
@@ -25,7 +24,7 @@
     <th:block sec:authorize="isAuthenticated()">
         <nav>
             <ul>
-                <li><a href="" th:text="${#authentication.principal.loggedMember.name}+님">장성호님 </a></li>
+                <li><a href="" th:text="${#authentication.principal.loggedMember.name}+님">이지선님 </a></li>
                 <li><a href="">로그아웃</a></li>
                 <li><a href="/isotope/main" th:href="@{/isotope/main}">전시회</a></li>
             </ul>
@@ -39,10 +38,9 @@
             </ul>
         </nav>
     </th:block>
-
-
-
 </header>
+
+
 <main id="main">
     <nav id="filter">
         <!--            //1. 여기를 서버에서 처리해서 내려받기-->
@@ -60,7 +58,8 @@
         <ul class="itemList">
             <th:block th:each="item : ${boardList}">
                 <li class="item" th:classappend="${item.category}">
-                    <a href="" th:href="@{|/upload/${item.renamed}|}"
+                    <a href=""
+                       th:href="@{|/upload/${item.renamed}|}"
                        data-fancybox="paint" data-caption="Single image"
                        th:attr="data-caption=${item.title}, data-fancybox=${item.category}">
                         <div class="img">
@@ -77,6 +76,7 @@
         </ul>
     </div>
 </main>
+
 <script>
 
     $("body").imagesLoaded( function() {

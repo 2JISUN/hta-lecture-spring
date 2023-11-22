@@ -1,36 +1,33 @@
-package com.jisun.isotope.dto;
+package com.jisun.board.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Getter
 @RequiredArgsConstructor
-@Slf4j
+@Getter
 public class CustomUserDetails implements UserDetails {
 
-    private final MemberDto loggedMember;
+    private final JoinDto loggedMember;
 
-    /*public CustomUserDetails(MemberDto loggedMember) {
-        this.loggedMember = loggedMember;
+    /*public CustomUserDetails(JoinDto loggedMember) {
+        this.loggedMember= loggedMember;
     }*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 등급
-        Collection<GrantedAuthority> collections = new ArrayList<>();
-        collections.add(new GrantedAuthority() {
+        Collection<GrantedAuthority> collection = new ArrayList<>();
+        collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return loggedMember.getUserRole();
+                return loggedMember.getRole();
             }
         });
-        return collections;
+        return collection;
     }
 
     @Override
@@ -39,6 +36,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
+    // 사용자 이름 아님.... 고유식별자...
     public String getUsername() {
         return loggedMember.getUserId();
     }

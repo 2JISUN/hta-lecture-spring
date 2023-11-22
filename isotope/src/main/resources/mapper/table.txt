@@ -1,0 +1,60 @@
+/*
+<jisun> isotope by oracle
+*/
+
+
+/*isotope갤러리*/
+CREATE TABLE isotope (
+      id NUMBER PRIMARY KEY ,
+      title varchar2(100) NOT NULL,
+      description varchar2(1000) ,
+      point NUMBER ,
+      category varchar2(100),
+      original varchar2(1000) NOT NULL, --원본        파일명 : 고윤정.jpg
+      renamed varchar2(1000) NOT NULL,  --서버에저장된 파일명 : 고윤정_20231117100550.jpg
+      regdate DATE
+);
+
+
+CREATE SEQUENCE isotope_seq
+   INCREMENT BY 1
+   START WITH 1
+   MINVALUE 1
+   MAXVALUE 999999;
+
+
+SELECT *
+FROM ISOTOPE;
+
+
+
+
+/*member멤버*/
+DROP TABLE member;
+
+
+CREATE TABLE member (
+      id        NUMBER PRIMARY KEY ,
+      userid    varchar2(100) NOT NULL,
+      password    varchar2(100) NOT NULL,
+      name      varchar2(100) NOT NULL,
+      email     varchar2(1000),
+      userrole  varchar2(1000),
+      regdate DATE
+);
+
+
+CREATE SEQUENCE member_seq
+   INCREMENT BY 1
+   START WITH 1
+   MINVALUE 1
+   MAXVALUE 999999;
+
+
+
+SELECT *
+FROM member;
+
+
+COMMIT;
+
