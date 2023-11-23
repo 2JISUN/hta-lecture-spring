@@ -37,7 +37,6 @@ public class BoardController {
     private String uploadFolder;
 
     private final BoardService boardService;
-
     private final PaginationMaker paginationMaker;
 
 
@@ -55,11 +54,27 @@ public class BoardController {
         // 모델에 데이터 추가
         model.addAttribute("boardList",boardList);
         model.addAttribute("paginationMaker",paginationMaker);
-        //log.info("getCurrentPage==={}",paginationMaker.getCriteria().getCurrentPage());
 
         // 게시글 목록 페이지로 이동
         return  "/board/list";
     }
+
+
+    /*게시글 상세보기*/
+    @GetMapping("/view/{id}")
+    public String getOneBoard(@PathVariable int id,Model model) {
+        //log.info("getOneBoard==={}",id);
+
+        // 게시글 상세 조회
+        BoardDto boardDto = boardService.getOneBoard(id);
+
+        // 모델에 데이터 추가
+        model.addAttribute("boardDto",boardDto);
+
+        // 게시글 상세보기 페이지로 이동
+        return  "/board/view";
+    }
+
 
     /*게시글 작성*/
     @GetMapping("/write")
@@ -96,24 +111,10 @@ public class BoardController {
             redirectAttributes.addFlashAttribute("modalDto",modalDto);
         }
 
-        return "redirect:/";
+        return "redirect:/board/list";
     }
 
 
-    /*게시글 상세보기*/
-    @GetMapping("/view/{id}")
-    public String getOneBoard(@PathVariable int id,Model model) {
-        //log.info("getOneBoard==={}",id);
-
-        // 게시글 상세 조회
-        BoardDto boardDto = boardService.getOneBoard(id);
-
-        // 모델에 데이터 추가
-        model.addAttribute("boardDto",boardDto);
-
-        // 게시글 상세보기 페이지로 이동
-        return  "/board/view";
-    }
 
     /*게시글 수정*/
     @GetMapping("/modify/{id}")
@@ -151,16 +152,16 @@ public class BoardController {
             redirectAttributes.addFlashAttribute("modalDto",modalDto);
         }
         // 목록 페이지로 리다이렉트
-        return  "redirect:/board/list?currentPage="   + currentPage +
-                                        "&category="  + category    +
-                                        "&searchTxt=" + searchTxt;
+        return  "redirect:/board/list?currentPage=" + currentPage +
+                                      "&category="  + category    +
+                                      "&searchTxt=" + searchTxt;
     }
 
     /*게시글 삭제 by ajax*/
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public Map<String,String> deleteBoard(@PathVariable int id) {
-        log.info("ajax로 넘어언 id==={}",id);
+        log.info("ajax로 넘어온 id==={}",id);
         int result = boardService.deleteBoard(id);
         Map<String, String> resultMap = new HashMap<>();
         if(result>0){

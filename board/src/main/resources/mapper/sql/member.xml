@@ -4,6 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jisun.board.dao.MemberDao">
 
+    <!--회원가입-->
     <insert id="insertMember" parameterType="JoinDto">
         insert into member values(
         member_seq.nextval,
@@ -17,25 +18,44 @@
         )
     </insert>
 
+    <!--로그인-->
     <select id="loginMember" parameterType="String" resultType="JoinDto">
-        select * from member where userId = #{userId}
+        select *
+        from member
+        where userId = #{userId}
     </select>
 
+    <!--회원 탈퇴 시 상태 변경-->
     <update id="deleteMember" parameterType="LoginDto">
-        update MEMBER set status = 0 WHERE userId = #{userId}
+        update MEMBER
+        set status = 0
+        WHERE userId = #{userId}
     </update>
 
+    <!--회원정보 수정-->
     <update id="updateMember" parameterType="JoinDto">
-        update member set name=#{name}, email=#{email} WHERE userId = #{userId}
+        update member
+        set name=#{name}, email=#{email}
+        WHERE userId = #{userId}
     </update>
 
+    <!--비밀번호 재발급-->
+    <update id="updatePassword" parameterType="UpdateDto">
+        update member
+        set password=#{password}
+        where email=#{email}
+    </update>
+
+    <!--회원 탈퇴시 탈퇴회원테이블에 추가-->
     <insert id="insertDeleteMember" parameterType="JoinDto">
-        insert into delete_member values(
+        insert into delete_member
+        values(
         deletemember_seq.nextval,
         #{userId},
         #{name},
         sysdate
         )
     </insert>
+
 
 </mapper>

@@ -32,7 +32,7 @@ public class SecurityConfig {
                 //요청에 대한 권한 설정
                 .authorizeHttpRequests((auth)->auth
                         //// 특정 URL 패턴에 대한 요청을 설정 -> 모든 사용자에게 허용
-                        .requestMatchers("/","/member/**","/css/**","/js/**","/images/**").permitAll()
+                        .requestMatchers("/","/member/**","/css/**","/js/**","/images/**", "/mail/**").permitAll()
                         //그 외의 요청은 모두 인증된 사용자에게만 허용
                         .anyRequest().authenticated()
                 )

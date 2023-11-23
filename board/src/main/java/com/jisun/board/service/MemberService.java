@@ -40,14 +40,15 @@ public class MemberService {
             log.info("비밀번호 같다.");
             String state = null;
             result = memberDao.deleteMember(loginDto);
-            if(state==null) {
-                throw new RuntimeException("에러남"); //???
-            }
+            /*if(state==null) {
+                throw new RuntimeException("에러남");
+            }*/
             memberDao.insertDeleteMember(dbLoginDto);
         }
         return result;
     }
 
+    @Transactional
     public int updateMember(@ModelAttribute JoinDto joinDto) {
         int result = 0;
         JoinDto dbLoginDto = memberDao.loginMember(joinDto.getUserId());

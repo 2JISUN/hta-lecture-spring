@@ -2,6 +2,7 @@ package com.jisun.board.dao;
 
 import com.jisun.board.dto.JoinDto;
 import com.jisun.board.dto.LoginDto;
+import com.jisun.board.dto.UpdateDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -11,4 +12,5 @@ public interface MemberDao {
     int deleteMember(LoginDto loginDto);
     int updateMember(JoinDto joinDto);
     int insertDeleteMember(JoinDto joinDto);
+    int updatePassword(UpdateDto updateDto);
 }
