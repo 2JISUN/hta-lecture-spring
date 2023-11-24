@@ -1,8 +1,10 @@
 package com.jisun.board.service;
 
+import com.jisun.board.code.ErrorCode;
 import com.jisun.board.dao.MemberDao;
 import com.jisun.board.dto.JoinDto;
 import com.jisun.board.dto.LoginDto;
+import com.jisun.board.exception.MemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,11 +17,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @Slf4j
 
 public class MemberService {
+    /*Bean ???*/
     private final MemberDao memberDao;
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /*회원가입*/
     public int insertMember(@ModelAttribute JoinDto joinDto) {
+        //회원가입시 이름에 욕설 사용 금지
+        if(joinDto.getName().contains("개새")) {
+            throw new MemberException(ErrorCode.BAD_NAME, "욕설은 적지 마시기를..");
+        }
+        //회원가입시 이메일 중복 불가능 처리
+        if(memberDao.duplicateEmail(joinDto.getEmail())>0){
+            throw new MemberException(ErrorCode.DUPLICATE_EMAIL);
+        }
+
         JoinDto insertJoinDto = JoinDto.builder()
                 .userId(joinDto.getUserId())
                 .password(bCryptPasswordEncoder.encode(joinDto.getPassword()))
@@ -27,10 +39,14 @@ public class MemberService {
                 .name(joinDto.getName())
                 .build();
         int result = memberDao.insertMember(insertJoinDto);
+        if(result<=0){
+            throw new MemberException(ErrorCode.DUPLICATE_MEMBER);
+        }
         return result;
     }
 
 
+    /*회원탈퇴*/
     @Transactional
     public  int deleteMember(@ModelAttribute LoginDto loginDto) {
         int result = 0;
@@ -48,6 +64,7 @@ public class MemberService {
         return result;
     }
 
+    /*비밀번호 재발급*/
     @Transactional
     public int updateMember(@ModelAttribute JoinDto joinDto) {
         int result = 0;
@@ -58,4 +75,9 @@ public class MemberService {
         }
         return result;
     }
+
+
+
+
+
 }

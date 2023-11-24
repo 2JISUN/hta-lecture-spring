@@ -13,9 +13,7 @@
                 <th scope="col">제목</th>
                 <th scope="col">글쓴이</th>
                 <th scope="col">날짜</th>
-                <th scope="col"></th>
-
-                <!--<th scope="col">날짜</th>-->
+                <th scope="col">삭제여부</th>
             </tr>
             </thead>
             <tbody>
@@ -28,7 +26,6 @@
                             <a href=""  th:text="${boardItem.title}"
                                th:href="@{/board/view/{id}(id=${boardItem.id},
                                           currentPage=${paginationMaker.criteria.currentPage})}"
-
                                th:attrappend="data-idx=${boardItem.id}" class="btnView">Mark</a>
                         </th:block>
                         <th:block th:unless="${param.category==null}">

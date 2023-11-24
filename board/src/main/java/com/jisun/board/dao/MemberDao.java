@@ -13,4 +13,6 @@ public interface MemberDao {
     int updateMember(JoinDto joinDto);
     int insertDeleteMember(JoinDto joinDto);
     int updatePassword(UpdateDto updateDto);
+    int duplicateEmail(String email);
+
 }

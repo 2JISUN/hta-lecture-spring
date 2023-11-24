@@ -26,16 +26,40 @@ public class MailService {
     private final MemberDao memberDao;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
+
+
+
     /*메일 전송*/
     public void sendMail(MailDto mailDto){
-      SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        MimeMessage message = javaMailSender.createMimeMessage(); //html 태그 인식 가능
+
+        try {
+            message.setFrom("snm03097@naver.com"); //보내는사람
+            message.setRecipients(MimeMessage.RecipientType.TO, mailDto.getReceiver()); //받는사람
+            message.setSubject(mailDto.getTitle());
+            message.setText(mailDto.getContent(),"UTF-8","html");
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+
+
+/*      SimpleMailMessage simpleMailMessage = new SimpleMailMessage(); //html 태그 인식 못함
 
         simpleMailMessage.setTo(mailDto.getReceiver());
         simpleMailMessage.setFrom("snm03097@naver.com");
         simpleMailMessage.setSubject(mailDto.getTitle());
         simpleMailMessage.setText(mailDto.getContent());
-        javaMailSender.send(simpleMailMessage);
+        javaMailSender.send(simpleMailMessage);*/
     }
+
+
+
+
+
+
+
 
 
     /*랜덤번호 난수생성*/
@@ -49,6 +73,8 @@ public class MailService {
     public MimeMessage createMail(String mail){
         createRandomNumber(); //랜덤번호 생성
         MimeMessage message = javaMailSender.createMimeMessage();
+
+
         try {
             message.setFrom("snm03097@naver.com"); //보내는사람
             message.setRecipients(MimeMessage.RecipientType.TO, mail); //받는사람

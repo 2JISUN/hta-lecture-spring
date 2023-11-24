@@ -1,11 +1,14 @@
 package com.jisun.board.service;
 
+import com.jisun.board.code.ErrorCode;
 import com.jisun.board.dao.BoardDao;
 import com.jisun.board.dto.BoardDto;
 import com.jisun.board.dto.Criteria;
+import com.jisun.board.exception.BoardException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,15 +39,27 @@ public class BoardService {
         return boardList;
     }
 
+    @Transactional //오류터지면 롤백해줌~~~!!(셀렉트와는 상관없지만 업데이트,딜리트,인서트에는 완전 완전 관계있음~!!! 후덜덜~~~)
     public int insertBoard(BoardDto boardDto) {
         int result = boardDao.insertBoard(boardDto);
+        if(result<=0){
+            throw new BoardException(ErrorCode.INVALID_REQUEST);
+        }
         return result;
     }
 
+
+
     public int deleteBoard(int id) {
         int result = boardDao.deleteBoard(id);
+        if(result<=0){
+            throw new BoardException(ErrorCode.INVALID_REQUEST);
+        }
+
         return result;
     }
+
+
 
     public BoardDto getOneBoard(int id) {
         BoardDto result = boardDao.getOneBoard(id);

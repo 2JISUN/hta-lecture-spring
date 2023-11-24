@@ -1,9 +1,8 @@
 package com.jisun.board.controller;
 
-import com.jisun.board.dto.BoardDto;
-import com.jisun.board.dto.Criteria;
-import com.jisun.board.dto.ModalDto;
-import com.jisun.board.dto.ToastDto;
+import com.jisun.board.code.ErrorCode;
+import com.jisun.board.dto.*;
+import com.jisun.board.exception.BoardException;
 import com.jisun.board.service.BoardService;
 import com.jisun.board.utils.PaginationMaker;
 import jakarta.validation.Valid;
@@ -44,19 +43,16 @@ public class BoardController {
     /*게시글 목록 : 페이지네이션, 검색*/
     @GetMapping("/list")
     public String list(Model model, @ModelAttribute Criteria criteria) {
-        // 게시글 목록 조회
-        List<BoardDto> boardList = boardService.getAllBoard(criteria);
 
-        // 페이지네이션 설정
-        paginationMaker.setCriteria(criteria);
-        paginationMaker.setTotal(boardService.getTotalCount(criteria));
+        List<BoardDto> boardList = boardService.getAllBoard(criteria); // 게시글 목록 조회
 
-        // 모델에 데이터 추가
-        model.addAttribute("boardList",boardList);
-        model.addAttribute("paginationMaker",paginationMaker);
+        paginationMaker.setCriteria(criteria); // 페이지네이션 설정
+        paginationMaker.setTotal(boardService.getTotalCount(criteria)); // 페이지네이션 설정
 
-        // 게시글 목록 페이지로 이동
-        return  "/board/list";
+        model.addAttribute("boardList",boardList);// 모델에 데이터 추가
+        model.addAttribute("paginationMaker",paginationMaker); // 모델에 데이터 추가
+
+        return  "/board/list"; // 게시글 목록 페이지로 이동
     }
 
 
@@ -65,14 +61,14 @@ public class BoardController {
     public String getOneBoard(@PathVariable int id,Model model) {
         //log.info("getOneBoard==={}",id);
 
-        // 게시글 상세 조회
-        BoardDto boardDto = boardService.getOneBoard(id);
+        BoardDto boardDto = boardService.getOneBoard(id); // 게시글 상세 조회
+/*        if(boardDto==null) {
+            //오류 났음....
+            throw new BoardException(ErrorCode.INVALID_REQUEST);
+        }*/
 
-        // 모델에 데이터 추가
-        model.addAttribute("boardDto",boardDto);
-
-        // 게시글 상세보기 페이지로 이동
-        return  "/board/view";
+        model.addAttribute("boardDto",boardDto); // 모델에 데이터 추가
+        return  "/board/view"; // 게시글 상세보기 페이지로 이동
     }
 
 
@@ -172,6 +168,9 @@ public class BoardController {
         return resultMap;
     }
 
+
+
+
     /*게시글 삭제 by form[GET]*/
     @GetMapping("/delete/{id}")
     public String deleteBoard(@PathVariable int id,
@@ -197,6 +196,9 @@ public class BoardController {
         return "redirect:/board/list?currentPage="+currentPage;
     }
 
+
+
+
     @PostMapping("/test")
     public String test(@RequestParam int id,
                        @RequestParam(required = false) int currentPage,
@@ -217,6 +219,9 @@ public class BoardController {
         log.info("0보다 작다");
         return "redirect:/board/list?currentPage="+currentPage;
     }
+
+
+
 
     @PostMapping("/upload")
     @ResponseBody
@@ -258,4 +263,32 @@ public class BoardController {
         return "/error";
         //return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
+
+
+
+
+    /*예외 처리 by 텍스트*/
+    @ExceptionHandler(BoardException.class)
+    @ResponseBody //만약 이게 없으면 파일을 리턴해야함 -> 리스폰스바디는 ㄹㅇ 텍스트를 리턴함!!
+    public ErrorDto runtimeHandle(BoardException e){
+        ErrorDto response = ErrorDto.builder()
+                .errorCode(e.getErrorCode())
+                .errorMessage(e.getDetailMessage())
+                .build();
+        return response;
+    }
+
+
+    /*예외 처리 by 파일*/
+/*    @ExceptionHandler(BoardException.class)
+    //@ResponseBody
+    public String runtimeHandle(Model model) {
+        model.addAttribute("title","오류");
+        return "/errors/error";
+    }*/
+
+
+
+
+
 }

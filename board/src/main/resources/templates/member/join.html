@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/layout}">
+            layout:decorate="~{/layout/layout}">
 
 <div layout:fragment="content" class="main">
 
@@ -74,7 +74,7 @@
     </div>
 </div>
     <script>
-        let isAuth = false;
+        let isAuth = true;
         let confirmNum = 0;
         $("#btnSend").on("click",function() {
             //requ
@@ -103,9 +103,9 @@
             if(isAuth) {
                 $("form").submit();
             }
-            alert("메일 인증 안했어효!!!!😓");
+            //alert("메일 인증 안했어효!!!!😓");
             return false;
-        })
+        });
 
     </script>
 </div>

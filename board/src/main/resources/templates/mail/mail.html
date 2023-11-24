@@ -8,6 +8,13 @@
         <form method="post" action="/mail/send">
 
             <div class="mb-3">
+                <label for="sender" class="form-label">보내는사람</label>
+                <input type="text" class="form-control" placeholder="snm03097@naver.com"
+                       id="sender" name="sender" readonly>
+            </div>
+
+
+            <div class="mb-3">
                 <label for="receiver" class="form-label">받는사람</label>
                 <input type="text" class="form-control" placeholder="받는 사람의 메일 주소"
                        id="receiver" name="receiver">
