@@ -37,7 +37,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 
