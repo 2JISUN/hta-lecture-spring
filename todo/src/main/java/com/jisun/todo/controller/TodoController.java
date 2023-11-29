@@ -25,6 +25,7 @@ public class TodoController {
     @PostMapping("/insert")
     @ResponseBody
     public List<TodoDto> insertTodo(@ModelAttribute TodoDto todoDto) {
+
         List<TodoDto> todoList = todoService.insertTodo(todoDto);
         return todoList;
     }

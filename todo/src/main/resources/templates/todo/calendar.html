@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/css/reset.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         #calendar {
-            width:800px;
+            width:1200px;
             margin: 50px auto;
         }
     </style>
@@ -16,36 +19,151 @@
 <div id="calendar">
 
 </div>
-<script>
-    const calendarEl = document.querySelector("#calendar");
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: "dayGridMonth",
-        timeZone: "UTC",
-        locale:"ko",
-        events: [
-            {
-                id: 'a',
-                title: '배고프당',
-                start: '2023-11-28',
-                backgroundColor:"#ff0000",
-                textColor:"#fff",
-                borderColor:"#ff0000"
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">일정 추가</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/calendar/todo" id="form">
+                    <div class="mb-3 row">
+                        <label for="eventId" class="col-sm-2 col-form-label">event id</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="eventId" value="event id" name="id">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="startDate" class="col-sm-2 col-form-label">start date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="startDate" value="start" name="start">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="startTime" class="col-sm-2 col-form-label">start time</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="startTime" value="start" name="startTime">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="endDate" class="col-sm-2 col-form-label">end date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="endDate" value="end" name="end">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="endTime" class="col-sm-2 col-form-label">end time</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="endTime" value="start" name="endTime">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="allDay" class="col-sm-2 col-form-label">ALL DAY</label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" class="form-check-input" id="allDay" name="allDay">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="title" class="col-sm-2 col-form-label">title</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="title" value="title" name="title">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="url" class="col-sm-2 col-form-label">url</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="url" value="title" name="url">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="color" class="col-sm-2 col-form-label">background color</label>
+                        <div class="col-sm-10">
+                            <input type="color" class="form-control form-control-color" id="color" value="backgroundColor" name="backgroundColor">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnConfirm">confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+
+
+        $("#btnConfirm").on("click",function(){
+            // 기본 기능 막기
+            console.log("btnConfirm");
+            //form 안에 모든 input의 값을 key:value로 만들기...
+            const sendData = $("#form").serialize();
+            console.log(sendData);
+            $.ajax({
+                url:"/calendar/modalTodo",
+                method:"post",
+                data:sendData,
+                success:function(result) {
+                    console.log(result);
+                    if(result.isInsert==="ok") {
+                        alert("일정이 추가되었습니다.");
+                    }
+                }
+
+            })
+            return false;
+        });
+
+        const myModal = new bootstrap.Modal("#myModal");
+
+        const calendarEl = document.querySelector("#calendar");
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: "dayGridMonth",
+            timeZone: "UTC",
+            locale:"ko",
+            selectable:true,
+            select:function(e) {
+                console.log(e)
+                myModal.show();
             },
-            {
-                id: 'b',
-                title: '배고프당02',
-                start: '2023-11-28'
-            },
-            {
-                id: 'b',
-                title: '배고프당03',
-                start: '2023-11-28',
-                end:"2023-11-31"
+            eventClick:function(e) {
+                console.log(e.event.url);
+                e.jsEvent.preventDefault();
+                window.open(e.event.url,"_blank");
             },
 
-        ]
-    });
-    calendar.render();
-</script>
+            // 서버에 내려온 변수를 js에 사용할려면
+            events: [[${calendarDtoList}]]
+            /*
+                [
+                    {
+                        id: 'a',
+                        title: '배고프당',
+                        start: '2023-11-28',
+                        backgroundColor:"#ff0000",
+                        textColor:"#fff",
+                        borderColor:"#ff0000"
+                    },
+                    {
+                        id: 'b',
+                        title: '배고프당02',
+                        start: '2023-11-28'
+                    },
+                    {
+                        id: 'b',
+                        title: '배고프당03',
+                        start: '2023-11-28',
+                        end:"2023-11-31"
+                    },
+                ]
+                */
+        });
+        calendar.render();
+    </script>
+
 </body>
 </html>
