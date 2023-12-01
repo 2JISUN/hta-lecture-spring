@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-
 @Entity //기본키(PK)가 반드시 필요함
 //@Table(name = "myBoard")
 public class Board02 {
@@ -22,4 +24,10 @@ public class Board02 {
 
     @Column(length = 2000)
     private String content;
+
+    private LocalDateTime createDate;
+
+    @OneToMany(mappedBy = "board02", cascade = CascadeType.REMOVE)
+    private List<Comment02> commentList;
+
 }

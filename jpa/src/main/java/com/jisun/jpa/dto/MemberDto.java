@@ -6,6 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @ToString
 public class MemberDto {
@@ -13,7 +14,6 @@ public class MemberDto {
     private String nickName;
     private String email;
     private int age;
-    private String address;
 
     public static MemberDto fromEntity(Member02 member02) {
         return MemberDto.builder()

@@ -2,28 +2,21 @@ package com.jisun.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
-@Getter
-@Setter
-@NoArgsConstructor //빈 생성자
-@AllArgsConstructor //전체 생성자
-@Builder
-@ToString
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@DynamicUpdate
 public class Member02 {
-
-    @Id //pk 필수임ㅋ
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
-
-    @Column(length = 30)
+    @Id
+    @Column(length = 30,unique = true)
     private String userId;
-
     @Column(length = 100)
     private String nickName;
-
-    @Column(length = 30)
-    private String email;
-
-    private int age;
+    @Column(length = 100)
+    private  String email;
+    private Integer age;
 }

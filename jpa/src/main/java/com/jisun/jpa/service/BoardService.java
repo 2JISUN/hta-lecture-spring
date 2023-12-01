@@ -1,5 +1,6 @@
 package com.jisun.jpa.service;
 
+import com.jisun.jpa.dto.BoardDto;
 import com.jisun.jpa.entity.Board02;
 import com.jisun.jpa.exception.DataNotFoundException;
 import com.jisun.jpa.repository.BoardRepository;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BoardService {
 
+    // 얘가 db에 왔다 갔다 하는 애....
     private final BoardRepository boardRepository;
 
     public Board02 insertBoard(Board02 board02){
@@ -20,18 +22,18 @@ public class BoardService {
         return board;
     }
 
-
     public List<Board02> getAllBoard() {
         List<Board02> boardList = boardRepository.findAll();
         return boardList;
     }
 
-    public Board02 getBoard(int id) {
+    // Optional
+    public BoardDto getBoard(int id) {
         Optional<Board02> board = boardRepository.findById(id);
-        if(board.isPresent()){
-            return board.get();
-        } else {
-            throw new DataNotFoundException("존재하지 않는 페이지 입니다."); //예외 처리
+        if(board.isPresent()) {
+            return BoardDto.fromEntity(board.get());
         }
+        throw new DataNotFoundException("찾는 거 없음");
+        //return null;
     }
 }
