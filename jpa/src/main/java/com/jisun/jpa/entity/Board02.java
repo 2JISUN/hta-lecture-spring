@@ -1,28 +1,30 @@
 package com.jisun.jpa.entity;
 
 import jakarta.persistence.*;
-
 import lombok.*;
+import lombok.extern.apachecommons.CommonsLog;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@Setter
+@Entity
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Entity //기본키(PK)가 반드시 필요함
-//@Table(name = "myBoard")
+@Table(name="board02")
 public class Board02 {
 
-    @Id //PK 명시
-    @GeneratedValue(strategy = GenerationType.SEQUENCE) //오라클 기본키 전략
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    //@Column(name="boardId")
     private Integer id;
 
+    //@Column(name = "mySubject")
     private String subject;
 
-    @Column(length = 2000)
+    //@Column(columnDefinition = "varchar2(1500)")
+    @Lob
     private String content;
 
     private LocalDateTime createDate;
@@ -30,4 +32,6 @@ public class Board02 {
     @OneToMany(mappedBy = "board02", cascade = CascadeType.REMOVE)
     private List<Comment02> commentList;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member02 writer;
 }

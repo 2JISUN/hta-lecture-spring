@@ -6,7 +6,10 @@
     <div class="container">
         <ul>
             <th:block th:each="item:${memberList}">
-                <li><a href="" th:href="@{/member/mypage(id=${item.userId})}"  th:text="${item.userId}">제목이 들어가겠죠....</a></li>
+                <li>
+                    <a href="" th:href="@{/member/mypage(id=${item.userId})}"  th:text="${item.userId}">제목이 들어가겠죠....</a>
+
+                </li>
             </th:block>
         </ul>
     </div>

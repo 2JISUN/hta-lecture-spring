@@ -13,6 +13,8 @@
                     <th scope="row">USER ID</th>
                     <td th:text="${memberInfo.userId}">Mark</td>
                     <input type="hidden" name="userId" th:value="${memberInfo.userId}">
+                    <input type="hidden" name="id" th:value="${memberInfo.id}">
+
                 </tr>
                 <tr>
                     <th scope="row">NICK NAME</th>
@@ -26,11 +28,6 @@
                         <input class="form-control" th:type="text" name="email" th:value="${memberInfo.email}">
                     </td>
                 </tr>
-                <tr>
-                    <th scope="row">AGE</th>
-                    <td><input class="form-control" th:type="text" name="age" th:value="${memberInfo.age}"></td>
-                </tr>
-
                 </tbody>
             </table>
             <div class="mt-5 d-flex justify-content-center" >

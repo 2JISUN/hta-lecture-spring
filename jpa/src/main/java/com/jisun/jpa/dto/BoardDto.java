@@ -12,28 +12,27 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class BoardDto {
-
     private Integer id;
+
     private String subject;
+
     private String content;
+
     private LocalDateTime createDate;
     private List<Comment02> commentList;
 
-    public static BoardDto fromEntity(Board02 board02) {
+    public static BoardDto fromEntity(Board02 board) {
         return BoardDto.builder()
-                .subject(board02.getSubject())
-                .content(board02.getContent())
-                .createDate(board02.getCreateDate())
+                .id(board.getId())
+                .subject(board.getSubject())
+                .content(board.getContent())
+                .createDate(board.getCreateDate())
+                .commentList(board.getCommentList())
                 .build();
     }
-
-
-
-
-
 }

@@ -1,14 +1,14 @@
 package com.jisun.jpa.service;
 
-import com.jisun.jpa.dto.BoardDto;
-import com.jisun.jpa.dto.CommentDto;
 import com.jisun.jpa.entity.Board02;
 import com.jisun.jpa.entity.Comment02;
+import com.jisun.jpa.entity.Member02;
 import com.jisun.jpa.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +23,19 @@ public class CommentService {
                 .board02(board02)
                 .build();
         commentRepository.save(comment);
+    }
 
+    public Comment02 insertAjaxComment(Board02 board02, String content, Member02 member02) {
+        Comment02 comment = Comment02.builder()
+                .content(content)
+                .createDate(LocalDateTime.now())
+                .writer(member02)
+                .board02(board02)
+                .build();
+        return commentRepository.save(comment);
+    }
 
+    public void deleteComment(int id) {
+        commentRepository.deleteById(id);
     }
 }

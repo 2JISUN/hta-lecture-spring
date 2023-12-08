@@ -2,27 +2,40 @@ package com.jisun.jpa.entity;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
+@Entity
 @Builder
-@NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
-@Entity //기본키(PK)가 반드시 필요함
+@SequenceGenerator(
+        name="comment_seq_generator",
+        sequenceName = "new_comment_seq",
+        initialValue = 1,
+        allocationSize = 1
+)
 public class Comment02 {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_seq_generator")
     private Integer id;
 
     @Column(length = 2000)
     private String content;
 
-
     private LocalDateTime createDate;
 
-    @ManyToOne  //보드하나에 댓글 여러개 달릴 수 있다
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "boardId")
     private Board02 board02;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member02 writer;
+
 }

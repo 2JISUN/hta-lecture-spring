@@ -1,10 +1,12 @@
 package com.jisun.jpa.controller;
 
 
+import com.jisun.jpa.dto.CustomUserDetails;
 import com.jisun.jpa.dto.MemberDto;
 import com.jisun.jpa.entity.Member02;
 import com.jisun.jpa.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,23 +25,25 @@ public class MemberController {
     @GetMapping("/mypage")
     public String mypage(@RequestParam String id,Model model) {
         //jfkjdksf?id=jjang
-        MemberDto memberInfo = memberService.getMemberInfo(id);
+        Member02 memberInfo = memberService.getMemberInfo(id);
         model.addAttribute("memberInfo",memberInfo);
         return "/member/mypage";
     }
 
     @GetMapping("/modify")
     public String modify(@RequestParam String id,Model model) {
-        MemberDto memberInfo = memberService.getMemberInfo(id);
+        Member02 memberInfo = memberService.getMemberInfo(id);
         model.addAttribute("memberInfo",memberInfo);
         return "/member/modify";
     }
 
-
     @PostMapping("/modify")
-    public String modifyProcess(@ModelAttribute MemberDto memberDto, Model model) {
-        MemberDto memberInfo = memberService.modifyMember(memberDto);
-        //model.addAttribute("memberInfo",memberInfo);
+    public String modifyProcess(@ModelAttribute MemberDto memberDto, Model model,
+                                @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+
+        Member02 updateMember = memberService.modifyMember(memberDto);
+        customUserDetails.getLoggedMember().updateMemberInfo(memberDto.getNickName(),memberDto.getEmail());
+        //customUserDetails.getLoggedMember().setEmail(updateMember.getEmail());
         return "redirect:/";
     }
 
@@ -48,6 +52,13 @@ public class MemberController {
         memberService.join(memberDto);
         return "redirect:/";
     }
+
+    @GetMapping("/login")
+    public String login(MemberDto memberDto, Model model) {
+        model.addAttribute("memberDto",new MemberDto());
+        return "/member/login";
+    }
+
 
     @GetMapping("/list")
     public String list(Model model) {
