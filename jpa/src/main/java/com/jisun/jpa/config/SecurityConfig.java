@@ -17,9 +17,6 @@ public class SecurityConfig {
 
     private final OAuth2DetailsService oAuth2DetailsService;
 
-
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests((auth)->auth

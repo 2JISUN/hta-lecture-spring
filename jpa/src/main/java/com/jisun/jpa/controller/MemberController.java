@@ -17,7 +17,9 @@ import java.util.List;
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
+
     private final MemberService memberService;
+
     @GetMapping("/join")
     public String join() {
         return "/member/join";
