@@ -1,0 +1,112 @@
+server:
+  port: 8080
+
+spring:
+  #  mvc:
+  #    view:
+  #      prefix: /WEB-INF/views
+  #      suffix: .jsp
+  #  messages:
+  #    basename: errors,messages
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
+  thymeleaf:
+    cache: false
+
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: outstargram
+    password: 1234
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    database: oracle
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        dialect: org.hibernate.dialect.Oracle12cDialect
+
+  #sns로그인 정보
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 902902808038-ugn4cpmnm49l8ded25r6c9dcgj9k4dhg.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - profile
+              - email
+          github:
+            client-id: 56a6d0cadb66041fd7c0
+            client-secret: 81af5269d0191e0da106e4115609f8389fe54e78
+            scope:
+              - profile
+              - email
+          naver:
+            client-name: Naver
+            client-id: ZYYPSQcUsAcpkOMMB37m
+            client-secret: izPoBvS5Mk
+            scope:
+              - nickname
+              - email
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/naver
+
+          kakao:
+            client-id: 2b55128d33862822faaa6c74b6082f31
+            client-secret: 6ZmghWn10rDQ8xKhqWzdnDdwTyWVoZbB
+            scope:
+              - profile_nickname
+              - profile_image
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            client-authentication-method: client_secret_post
+
+        provider:
+          naver:
+            authorization-uri: https://nid.naver.com/oauth2.0/authorize
+            token-uri: https://nid.naver.com/oauth2.0/token
+            user-info-uri: https://openapi.naver.com/v1/nid/me
+            user-name-attribute: response
+
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+    profiles:
+      include=oauth;
+
+  #메일
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: snm03097@naver.com
+    password: luckyzzang0109
+    properties:
+      debug: true
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.trust: smtp.naver.com
+    protocol: smtps
+
+
+
+file:
+  path: C:/outstargram/
+
+pagination:
+  size: 10
