@@ -6,7 +6,11 @@
     <div class="container justify-content-center d-flex">
         <div class="col-4">
             <h2>JOIN</h2>
-            <form method="post" action="/auth/login" th:action="@{/auth/login}" th:object="${joinDto}">
+            <form method="post"
+                  action="/auth/login"
+                  th:action="@{/auth/join}"
+                  th:object="${joinDto}">
+
                 <div class="mb-3">
                     <label for="userId" class="form-label">ID</label>
                     <input type="text" class="form-control" placeholder="id" id="userId" th:field="*{userId}">

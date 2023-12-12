@@ -26,7 +26,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     database: oracle
@@ -104,7 +104,7 @@ spring:
     protocol: smtps
 
 
-
+#이미지 저장 경로 지정
 file:
   path: C:/outstargram/
 

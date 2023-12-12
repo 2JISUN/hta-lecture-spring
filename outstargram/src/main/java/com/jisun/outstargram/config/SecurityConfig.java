@@ -16,10 +16,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-/*    @Bean
+/*
+    @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder;*/
 
     //private final PasswordEncoderConfig passwordEncoderConfig; //BCry 암호화  -> 충돌나서 쪼갬~~~
+
+
     private final OAuth2DetailsService oAuth2DetailsService;
 
 
@@ -42,7 +45,7 @@ public class SecurityConfig {
                 )
                 .logout(auth->auth
                         .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                        .logoutSuccessUrl("/auth/logout")
+                        .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                 )
                 .oauth2Login((ouath2Login) -> ouath2Login

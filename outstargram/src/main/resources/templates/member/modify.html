@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout}">
+<div layout:fragment="content" class="main">
+    <div class="container justify-content-center d-flex">
+        <div class="col-4">
+            <h2>✍🏻MODIFY</h2>
+            <form method="post"
+                  action="#"
+                  th:action="@{/member/modify/{id}(id=${memberInfo.loggedMember.id})}">
+
+                <div class="mb-3">
+                    <label for="userId" class="form-label">ID</label>
+                    <input type="text" class="form-control" placeholder="id" id="userId" name="userId" th:value="${memberInfo.loggedMember.userId}" readonly>
+
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">PASSWORD</label>
+                    <input type="password" class="form-control" placeholder="password" id="password"  name="password" readonly>
+
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">EMAIL</label>
+                    <input type="email" class="form-control" placeholder="email" id="email"  name="email" th:value="${memberInfo.loggedMember.email}">
+
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">NAME</label>
+                    <input type="text" class="form-control" placeholder="name" id="name" name="name" th:value="${memberInfo.loggedMember.name}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="mbti" class="form-label">MBTI</label>
+                    <input type="text" class="form-control" placeholder="mbti" id="mbti" name="mbti" th:value="${memberInfo.loggedMember.mbti}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">PHONE</label>
+                    <input type="text" class="form-control" placeholder="phone" id="phone" name="phone" th:value="${memberInfo.loggedMember.phone}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">DESC</label>
+                    <textarea class="form-control" placeholder="description" id="description" name="description" th:value="${memberInfo.loggedMember.description}">
+                    </textarea>
+                </div>
+
+
+                <div class="mt-5 d-grid">
+                    <button class="btn btn-primary" id="btnSubmit">회원정보수정 완료</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+</html>
