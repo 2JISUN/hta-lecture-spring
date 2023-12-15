@@ -1,6 +1,7 @@
 package com.jisun.outstargram.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.jisun.outstargram.constant.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -34,6 +36,8 @@ public class Member {
 
     private String name;
 
+    //private String nickname; //OAuth2
+
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -48,6 +52,13 @@ public class Member {
     private Role role;
 
     private String profileImageUrl;
+
+
+
+    //양방향매핑
+    @OneToMany(mappedBy = "member") // "FK가 아니다" 를 알려주기
+    @JsonIgnoreProperties({"member"}) //무한참조 방지
+    private List<Image> imageList;
 
     @CreatedDate
     private LocalDateTime createDate; //계정 생성날짜

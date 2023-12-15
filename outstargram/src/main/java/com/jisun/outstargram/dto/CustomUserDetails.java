@@ -4,22 +4,41 @@ package com.jisun.outstargram.dto;
 
 import com.jisun.outstargram.entity.Member;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 
-@Data //getter & setter
-public class CustomUserDetails implements UserDetails {
+@Getter
+public class CustomUserDetails implements UserDetails, OAuth2User {
 
     private Member loggedMember; //콤포지션
+    private Map<String, Object> attributes;
 
-    //생성자 있어야함~~
+
+    //생성자 있어야함~!!
+    //UserDetails : 홈페이지에서 회원가입한 유저
     public CustomUserDetails(Member loggedMember){
         this.loggedMember = loggedMember;
     }
+
+    //OAuth2User : sns계정으로 회원가입한 유저
+    public CustomUserDetails(Member loggedMember, Map<String, Object> attributes) {
+        this.loggedMember = loggedMember;
+        this.attributes = attributes;
+    }
+
+    //OAuth2User
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
 
 
     @Override
@@ -64,4 +83,14 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+    //OAuth2User
+    @Override
+    public String getName() {
+        return (String)attributes.get("name");
+    }
+
+
+
 }

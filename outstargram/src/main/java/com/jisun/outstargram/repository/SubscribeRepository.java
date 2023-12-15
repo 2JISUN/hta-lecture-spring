@@ -15,10 +15,16 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Integer> {
     //CRUD
 
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query(value = "INSERT into subscribe (id, fromMemberId, toMemberId, createdate) values (SUBSCRIBE_SEQ.nextval, :fromMemberId, :toMemberId, sysdate)"
           ,nativeQuery = true)
     void 구독하기_레포지토리(@Param("fromMemberId") int fromMemberId, @Param("toMemberId")int toMemberId);
+
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "delete from SUBSCRIBE where fromMemberId = :loggedMemberId and toMemberId = :urlId"
+            ,nativeQuery = true)
+    void 구독취소_레포지토리(@Param("loggedMemberId") int loggedMemberId, @Param("urlId")int urlId);
 
 
     @Query(value="SELECT COUNT(*) FROM SUBSCRIBE WHERE fromMemberId = :memberId"
@@ -30,10 +36,7 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Integer> {
           ,nativeQuery = true)
     int 구독확인_레포지토리(@Param("loggedMemberId") int loggedMemberId,@Param("urlId") int urlId );
 
-    @Modifying
-    @Query(value = "delete from SUBSCRIBE where fromMemberId = :loggedMemberId and toMemberId = :urlId"
-            ,nativeQuery = true)
-    int 구독취소_레포지토리(@Param("loggedMemberId") int loggedMemberId, @Param("urlId")int urlId);
+
 
 
 }

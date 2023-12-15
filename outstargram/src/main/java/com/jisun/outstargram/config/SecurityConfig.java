@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .formLogin(auth->auth
                         .loginPage("/auth/login") // get
                         .loginProcessingUrl("/auth/login") // post
-                        .defaultSuccessUrl("/",true)
+                        .defaultSuccessUrl("/image/story",true)
                         .usernameParameter("userId")
                         .passwordParameter("password")
                         .permitAll()
