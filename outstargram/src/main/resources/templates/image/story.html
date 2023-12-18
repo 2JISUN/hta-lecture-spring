@@ -37,6 +37,10 @@
 
         </div>
     </div>
+
+
+
+
     <script th:inline="javascript">
         let loadPage = 0;
         loadStory();
@@ -56,14 +60,27 @@
                                     <img src="/upload/${item.member.profileImageUrl}" alt="">
                                     <span>${item.member.name}</span>
                                 </div>
+                                <!-- 상단 글쓴 사람 정보-->
                                 <div class="main-image">
                                     <img src="/upload/${item.imgUrl}">
                                 </div>
-                                <div class="caption">${item.caption}</div>
-                                <div class="mb-3 comment-box">
+                                <!-- 이미지 불러오는 곳 -->
+                                <div class="caption fs-4  p-3 fw-bold">${item.caption}</div>
+                                <!-- 제목 -->
+                                <div class="like-box p-3">
+                                    <span class="icon" data-state="hate">
+                                        <i class="bi bi-balloon-heart-fill text-danger fs-3"></i>
+                                        <!--<i class="bi bi-balloon-heart fs-3"></i>-->
+                                    </span>
+                                    <span class="num">3</span>
+                                </div>
+                                <!-- 종ㅎ아요...-->
+
+                                <div class="mb-3 comment-box p-3">
                                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                     <button class="btn btn-outline-primary mt-2">comment</button>
                                 </div>
+                                <!-- 댓글 -->
                             </div>
                         </li>
                     `
@@ -73,6 +90,29 @@
 
             });
         }
+
+        $("body").on("click",".icon",function(){
+            console.log("icon click");
+            const heart = $(this).find("i");
+            if($(this).data("state")=="like") {
+                $(this).data("state","hate");
+                heart.removeClass("bi-balloon-heart-fill");
+                heart.removeClass("text-danger");
+                heart.addClass("bi-balloon-heart");
+            } else {
+                $.ajax({
+                    method:"POST",
+                    url:"/api/image/152/likes",
+                    success:function(response){
+                        console.log(response);
+                    }
+                });
+                $(this).data("state","like");
+                heart.addClass("bi-balloon-heart-fill");
+                heart.addClass("text-danger");
+                heart.removeClass("bi-balloon-heart");
+            }
+        })
 
         $(".btn-more").on("click", function () {
             loadPage++;
@@ -88,7 +128,7 @@
             const wh = $(window).height();
             const dh = $(document).height();
             const st = $(window).scrollTop();
-            if(wh+st == dh) {
+            if(wh+st >= dh - 100) {
                 loadPage++;
                 loadStory();
                 if(loadPage>=totalPages) {
