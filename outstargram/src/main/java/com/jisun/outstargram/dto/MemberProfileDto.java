@@ -13,6 +13,7 @@ public class MemberProfileDto {
     private Member member;
     private int subscribeCount;
     private boolean subscribeState;
+    private int likeTotal;
 }
 
 

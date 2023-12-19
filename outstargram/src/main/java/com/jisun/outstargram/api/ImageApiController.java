@@ -45,4 +45,14 @@ public class ImageApiController {
         return resultMap;
     }
 
+    @DeleteMapping("/image/{imageId}/likes")
+    public Map<String, Object> 좋아요취소_프로세스(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                        @PathVariable int imageId ) {
+        int result = likesService.좋아요취소_서비스(imageId, customUserDetails.getLoggedMember().getId());
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("isState", "OK");
+        return resultMap;
+    }
+
+
 }

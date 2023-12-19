@@ -49,6 +49,7 @@ public class ImageService {
     public Page<Image> 스토리리스트_서비스(int customDetailId, Pageable pageable) {
         Page<Image> images = imageRepository.스토리리스트_레포지토리(customDetailId, pageable);
         images.forEach((image) ->{
+            image.setLikeTotal(image.getLikes().size());  //arraylist
             image.getLikes().forEach((like)->{
                 if(like.getMember().getId()==customDetailId){
                     image.setLikeState(true);

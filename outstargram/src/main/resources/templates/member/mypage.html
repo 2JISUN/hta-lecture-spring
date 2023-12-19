@@ -21,21 +21,26 @@
                 <div class="info">
                     <div class="btns">
                         <th:block th:if="${memberInfo.pageOwner}">
-                            <a href="/image/upload" class="btn btn-primary">스토리 업로드</a>
+                            <a href="/image/upload" class="btn btn-primary">
+                                스토리 업로드
+                            </a>
                         </th:block>
                         <th:block th:unless="${memberInfo.pageOwner}">
                             <button class="btn btn-outline-primary" id="btnSubscribe"
                                     th:data-idx="${memberInfo.member.id}"
-                                    th:if="${memberInfo.subscribeState}" data-subscribe="cancel">구독취소
+                                    th:if="${memberInfo.subscribeState}" data-subscribe="cancel">
+                                구독취소
                             </button>
                             <button class="btn btn-outline-primary" id="btnSubscribe"
                                     th:data-idx="${memberInfo.member.id}"
-                                    th:unless="${memberInfo.subscribeState}" data-subscribe="confirm">구독하기
+                                    th:unless="${memberInfo.subscribeState}" data-subscribe="confirm">
+                                구독하기
                             </button>
                         </th:block>
                         <button class="btn btn-outline-info"
                                 data-bs-toggle="modal"
-                                data-bs-target="#menuModal">SETTING
+                                data-bs-target="#menuModal">
+                            로그아웃 및 정보수정
                         </button>
                     </div>
                     <div class="subscribe mt-2">
@@ -54,12 +59,18 @@
                     </div>
                 </div>
 
-                <div class="story-list">
+                <div class="story-list mypage-story-list">
                     <ul>
                         <th:block th:each="item:${memberInfo.member.imageList}">
-                            <li>
-                                <img src="/images/500.png" th:src="@{|/upload/${item.imgUrl}|}">
-                            </li>
+                        <li>
+                            <img src="/images/500.png" th:src="@{|/upload/${item.imgUrl}|}">
+                            <div class="overlay">
+                                <span class="icon">
+                                    <i class="bi bi-balloon-heart-fill text-white fs-3"></i>
+                                </span>
+                                <span class="text-white fs-3" th:text="${item.likeTotal}"></span>
+                            </div>
+                        </li>
                         </th:block>
                     </ul>
                 </div>

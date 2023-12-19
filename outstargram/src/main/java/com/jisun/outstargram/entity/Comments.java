@@ -1,5 +1,6 @@
 package com.jisun.outstargram.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,52 +10,37 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //빈 생성자 허용 금지
 @AllArgsConstructor
 @DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)
-public class Image {
+public class Comments {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
-    private String caption;
+    @Column(length = 300, nullable = false)
+    private String content;
 
-    private String imgUrl;
-
-    @JoinColumn(name="member_id")
-    @ManyToOne
+    @ManyToOne //Comments : Member = Many : One
+    @JoinColumn(name="memberId")
     @JsonIgnoreProperties({"imageList"})
     private Member member;
 
-    @OneToMany(mappedBy = "image")
-    @JsonIgnoreProperties({"image"})
-    private List<Likes> likes;
-
-
-    @OrderBy("createDate DESC")
-    @OneToMany(mappedBy = "image") //Image : Comments = One : Many
-    @JsonIgnoreProperties({"image"}) //무한참조 방지
-    private List<Comments> commentsList;
-
-    //좋아요 상태
-    @Transient //컬럼 없이 속성을 만들 수 있음
-    private boolean likeState;
-
-    //좋아요 개수
-    @Transient //컬럼 없이 속성을 만들 수 있음
-    private int likeTotal;
+    @ManyToOne //Comments : Image = Many : One
+    @JoinColumn(name="imageId")
+    private Image image;
 
     @CreatedDate
     private LocalDateTime createDate;
 
     @LastModifiedDate
     private LocalDateTime modifyDate;
+
 }
