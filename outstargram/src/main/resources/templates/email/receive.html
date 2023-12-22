@@ -7,21 +7,32 @@
         <div class="col-4">
             <h2>EMAIL 받기</h2>
             <hr>
-            <div class="mb-3">
-                <label for="sendEmail" class="form-label">메일 보내는 사람</label>
-                <input type="text" class="form-control" placeholder="snm03097@naver.com" id="sendEmail" name="sendEmail" readonly>
-            </div>
-            <div class="mb-3">
-                <label for="receiver" class="form-label">메일 받는 사람(메일 수정 가능합니다.)</label>
-                <input type="text" class="form-control" placeholder="아이디@메일주소" id="receiver" name="receiveEmail" th:value="${memberInfo.loggedMember.email}">
-            </div>
-            <div class="mt-5">
-                <button class="btn btn-primary" id="btn-Email">행운의 편지 받아보세요🍀</button>
-            </div>
+            <form method="post"
+                  th:action="@{/api/email/receive}">
+                <div class="mb-3">
+                    <label for="sendEmail" class="form-label">메일 보내는 사람</label>
+                    <input type="text" class="form-control" placeholder="snm03097@naver.com" id="sendEmail" name="sendEmail" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="receiverAddress" class="form-label">메일 받는 사람(메일 수정 가능)</label>
+                    <input type="text" class="form-control" placeholder="아이디@메일주소" id="receiverAddress" name="receiverAddress" th:value="${memberInfo.loggedMember.email}">
+                </div>
+                <div class="mb-3">
+                    <label for="title" class="form-label">제목</label>
+                    <input type="text" class="form-control" placeholder="제목을 입력하세요" id="title" name="title">
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">내용</label>
+                    <textarea id="content" name="content" placeholder="보낼 내용을 입력하세요"> </textarea>
+                </div>
+                <div class="mt-5">
+                    <button class="btn btn-primary" id="btn-Email">메일 보내기🍀</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <script th:inline="javascript">
+<!--    <script th:inline="javascript">
         let index = {
             init: function () {
                 $("#btn-Email").on("click", () => {
@@ -31,19 +42,22 @@
             },
 
             email : function () {
-
                 let receiver = $("#receiver").val();
+                let data = {
+                    "receiver": receiver
+                };
+
                 $.ajax({
                     type: "POST",
                     url: "/api/email/receive",
-                    data: JSON.stringify(receiver),
+                    data: JSON.stringify(data),
                     dataType: "json",
                     contentType: "application/json; charset=utf-8"
-                }).done(function (response){
+                }).done(function (response) {
                     console.log(response);
                     alert("메일함을 확인해보세요💚");
-                    location.href="/";
-                }).fail(function (error){
+                    location.href = "/";
+                }).fail(function (error) {
                     alert(JSON.stringify(error));
                 });
             }
@@ -52,9 +66,7 @@
         index.init();
 
 
-    </script>
+    </script>-->
 
 </div>
-
-
 </html>

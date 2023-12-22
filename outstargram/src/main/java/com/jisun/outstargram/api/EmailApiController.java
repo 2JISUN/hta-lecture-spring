@@ -19,8 +19,8 @@ public class EmailApiController {
     private final EmailService emailService;
 
     @PostMapping("/email/receive")
-    public Map<String, Object> 이메일받기_프로세스(@RequestBody EmailDto emailDto){  //receiver
-        emailService.이메일받기_서비스(emailDto.getReceiver());
+    public Map<String, Object> 이메일받기_프로세스(EmailDto emailDto){  //<폼> 방식 == application/x-www-form-urlencoded 으로 넘어오는 데이터
+        emailService.이메일보내기_서비스(emailDto);
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("isState", "OK");
         return resultMap;

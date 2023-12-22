@@ -5,6 +5,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,21 @@ public class EmailService {
         log.info("randomNumber==={}",randomNumber);
     }
 
-    public MimeMessage 이메일받기_서비스(String receiver) {
+    public void 이메일보내기_서비스(EmailDto emailDto){
+        랜덤번호생성();
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("snm03097@naver.com");
+        message.setTo(emailDto.getReceiverAddress());
+        message.setSubject(emailDto.getTitle());
+        message.setText(emailDto.getContent() + "/n 랜덤번호 출력" + "<h1 style='font-size:100px; color:#f00;'>"+randomNumber+"</h1>");
+        javaMailSender.send(message);
+
+    }
+
+
+
+
+/*    public MimeMessage 이메일받기_서비스(EmailDto mailDto) {
         //렌덤 숫자 생성
         랜덤번호생성();
         MimeMessage message =  javaMailSender.createMimeMessage();
@@ -37,5 +52,7 @@ public class EmailService {
             throw new RuntimeException(e);
         }
         return message;
-    }
+    }*/
+
+
 }

@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 public class EmailDto {
 
-    private String receiver; //받는사람
+    private String receiverAddress; //받는사람
     private String title; //제목
     private String content; //내용
     

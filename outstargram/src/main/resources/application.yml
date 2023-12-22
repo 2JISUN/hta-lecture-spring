@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
   #  mvc:
@@ -19,9 +19,16 @@ spring:
 
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@54.180.163.145:1521:xe #aws 연결
-    username: aws
+    url: jdbc:oracle:thin:@localhost:1521:xe #aws 연결
+    username: outstargram
     password: 1234
+
+  #aws 연결
+#  datasource:
+#    driver-class-name: oracle.jdbc.driver.OracleDriver
+#    url: jdbc:oracle:thin:@54.180.163.145:1521:xe
+#    username: aws
+#    password: 1234
 
   jpa:
     open-in-view: true
