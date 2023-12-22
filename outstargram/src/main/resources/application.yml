@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   #  mvc:
@@ -19,8 +19,8 @@ spring:
 
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:xe
-    username: outstargram
+    url: jdbc:oracle:thin:@54.180.163.145:1521:xe #aws 연결
+    username: aws
     password: 1234
 
   jpa:
@@ -93,10 +93,13 @@ spring:
 
   #메일
   mail:
+    #host, port는 naver에서 정해준 값
     host: smtp.naver.com
     port: 465
+    #본인 naver 계정정보 삽입
     username: snm03097@naver.com
     password: luckyzzang0109
+    #전송하기 위한 prop으로 ssl의 신뢰, 권한 등 사용허가
     properties:
       debug: true
       mail.smtp.auth: true
@@ -107,7 +110,7 @@ spring:
 
 #이미지 저장 경로 지정
 file:
-  path: C:/outstargram/
+  path: C:/outstargram/  #리눅스 환경에서 --> /home/ubuntu/outstargram
 
 pagination:
   size: 10

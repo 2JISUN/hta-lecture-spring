@@ -113,15 +113,27 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: 0;
+  transition: all 0.25s ease;
+}
+.mypage-story-list li:hover .overlay {
+  opacity: 1;
 }
 
 .comment-list .btn-close {
   margin-left: auto;
 }
-
+.comment-list li {
+  align-items: center;
+}
 .comment-list li .profile-image img {
   width:30px;
   height: 30px;
   object-fit: cover;
   border-radius: 100px;
+}
+
+.story-box .main-image {
+  display: flex;
+  justify-content: center;
 }

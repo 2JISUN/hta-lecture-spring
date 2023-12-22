@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/layout}">
+      layout:decorate="~{layout/layout}">
 <div layout:fragment="content" class="main">
     <div class="container justify-content-center d-flex">
         <div class="col-4">
@@ -42,7 +42,7 @@
 
                 <div class="mb-3">
                     <label for="description" class="form-label">DESC</label>
-                    <textarea class="form-control" placeholder="description" id="description" name="description" th:value="${memberInfo.loggedMember.description}">
+                    <textarea class="form-control" placeholder="description" id="description" name="description" th:text="${memberInfo.loggedMember.description}">
                     </textarea>
                 </div>
 

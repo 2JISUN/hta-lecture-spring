@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
@@ -60,4 +61,17 @@ public class ImageService {
     }
 
 
+    public Page<Image> 인기짱스토리리스트_서비스(Pageable pageable) {
+        return imageRepository.인기짱스토리리스트_레포지토리(pageable);
+    }
+
+
+    public Image 스토리디테일_서비스(int id) {
+        Image imageInfo = imageRepository.findById(id)
+                .orElseThrow(()->{
+                    return new RuntimeException("해당 이미지를 찾을 수 없습니다.");
+                });
+        imageInfo.setLikeTotal(imageInfo.getLikes().size());
+        return imageInfo;
+    }
 }

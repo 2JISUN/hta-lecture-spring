@@ -32,7 +32,7 @@ public class MemberController {
                                @AuthenticationPrincipal CustomUserDetails customUserDetails){
         MemberProfileDto memberInfo = memberService.getProfile(id,customUserDetails.getLoggedMember().getId());
         model.addAttribute("memberInfo", memberInfo);
-        return  "/member/mypage";
+        return  "member/mypage";
 
     }
 
@@ -41,7 +41,7 @@ public class MemberController {
                                      Model model,
                                      @AuthenticationPrincipal CustomUserDetails customUserDetails){
         model.addAttribute("memberInfo",customUserDetails);
-        return "/member/modify"; //+ id; -> 리다이렉트 할때만 이런식으로 유효함!!!!!
+        return "member/modify"; //+ id; -> 리다이렉트 할때만 이런식으로 유효함!!!!!
     }
 
 

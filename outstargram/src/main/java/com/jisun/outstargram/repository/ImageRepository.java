@@ -18,11 +18,15 @@ import java.util.List;
 public interface ImageRepository extends JpaRepository<Image, Integer> {
     //CRUD
 
-    //@Modifying(clearAutomatically = true)
+    //@Modifying(clearAutomatically = true) --> db수정시에만 사용함
     @Query(value = "SELECT * FROM IMAGE WHERE MEMBER_ID in (SELECT TOMEMBERID FROM SUBSCRIBE WHERE FROMMEMBERID = :customUserDetailsId)",
             nativeQuery = true)
     Page<Image> 스토리리스트_레포지토리(@Param("customUserDetailsId") int customUserDetailsId, Pageable pageable);
 
 
+    //@Modifying(clearAutomatically = true) --> db수정시에만 사용함
+    @Query(value = "SELECT * FROM image INNER JOIN (SELECT imageid, count(imageid) AS likeCount FROM LIKES GROUP BY imageid) c ON image.id = c.imageid ORDER BY likeCount desc"
+            , nativeQuery = true)
+    Page<Image> 인기짱스토리리스트_레포지토리(Pageable pageable);
 
 }

@@ -21,7 +21,7 @@ public class AuthController {
     @GetMapping("/join") // url = /auth/join
     public String 회원가입_페이지(Model model) {
         model.addAttribute("joinDto", new JoinDto()); //유효성검사를 위한.. 없으면 안됩니다~~
-        return "/auth/join";
+        return "auth/join";
     }
 
 
@@ -42,7 +42,7 @@ public class AuthController {
     @GetMapping("/login") // url = /auth/login
     public String 로그인_페이지(Model model) {
         model.addAttribute("joinDto", new JoinDto()); //없으면 안됩니다~~
-        return "/auth/login";
+        return "auth/login";
     }
 
 
